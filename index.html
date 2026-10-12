@@ -154,6 +154,7 @@ section{position:relative}
 .person:first-child{padding-left:0}.person:last-child{border-right:0;padding-right:0}
 .person .role{font:500 20px/1 var(--sans);letter-spacing:.16em;color:var(--amber-deep)}
 .person .mono{font:900 64px/1 var(--serif);color:var(--paper);-webkit-text-stroke:1.2px var(--on-paper);margin:26px 0 18px}
+.person .face{display:block;width:112px;height:112px;object-fit:cover;border-radius:50%;border:2px solid var(--amber-deep);margin:26px 0 18px;background:var(--paper-line)}
 .person h3{font-size:28px;font-weight:900}
 .person .title{font-size:20px;color:var(--on-paper-mute);margin:6px 0 18px;line-height:1.6}
 .person p.bio{font-size:20px;line-height:1.85;flex:1}
@@ -402,7 +403,7 @@ footer .base a{text-decoration:none}footer .base a:hover{color:var(--amber-hi)}
     <div class="people-grid">
       <article class="person rv">
         <span class="role">創辦人 ‧ 主持</span>
-        <div class="mono" aria-hidden="true">榮</div>
+        <img class="face" src="img/people-qiu-yurong.jpg" alt="邱裕榮" width="112" height="112" loading="lazy">
         <h3>邱裕榮</h3>
         <p class="title">才榮數位 總經理｜AI 傳道學院 創辦人｜AI 媒體聯盟 總編輯</p>
         <p class="bio">從《工商時報》大陸新聞中心、《管理雜誌》，到東森聯播網《BossClub 老闆俱樂部》主持台。他坐在無數董事長對面，慢慢看見：真正影響企業與社會的，不只是策略與資本，而是價值觀、呼召與生命的抉擇。</p>
@@ -411,7 +412,7 @@ footer .base a{text-decoration:none}footer .base a:hover{color:var(--amber-hi)}
       </article>
       <article class="person rv">
         <span class="role">創辦人 ‧ 主持</span>
-        <div class="mono" aria-hidden="true">樹</div>
+        <img class="face" src="img/people-wu-dashu.jpg" alt="吳大樹" width="112" height="112" loading="lazy">
         <h3>吳大樹</h3>
         <p class="title">大樹教練｜海餅乾俱樂部 創辦人｜大樹教育顧問</p>
         <p class="bio">相信「專注本業，才有高溢價；不懂的，交給隊友裡的專家」。他每週把客戶、人才與伯樂請進同一個房間，也發起 AI 百人導師計劃，帶更多人用正向的方式走進 AI 的世界。</p>
@@ -420,7 +421,7 @@ footer .base a{text-decoration:none}footer .base a:hover{color:var(--amber-hi)}
       </article>
       <article class="person rv">
         <span class="role">本節目命名人</span>
-        <div class="mono" aria-hidden="true">昌</div>
+        <img class="face" src="img/people-wu-jinchang.jpg" alt="吳錦昌" width="112" height="112" loading="lazy">
         <h3>吳錦昌</h3>
         <p class="title">順發電腦 創辦人 ‧ 董事長</p>
         <p class="bio">長年倡導「用消費改變世界」。一份單純的初心，走成一條十七年的公益之路；Run for Future 公益路跑自 2019 年起，2027 年邁入第五屆。榮樹下第一集，就從他的故事開始。</p>
@@ -605,18 +606,19 @@ footer .base a{text-decoration:none}footer .base a:hover{color:var(--amber-hi)}
           <div class="field"><label for="org">企業／單位名稱 <span class="req">*</span></label><input id="org" name="org" required autocomplete="organization" aria-describedby="org-err"><p class="err" id="org-err"></p></div>
           <div class="field"><label for="who">聯絡人與職稱 <span class="req">*</span></label><input id="who" name="who" required autocomplete="name" placeholder="例：王小明 總經理" aria-describedby="who-err"><p class="err" id="who-err"></p></div>
           <div class="field full"><label for="contact">電話或 Email <span class="req">*</span></label><input id="contact" name="contact" required autocomplete="email" aria-describedby="contact-err"><p class="err" id="contact-err"></p></div>
+          <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
           <div class="field full"><label for="msg">想說的話</label><textarea id="msg" name="msg" placeholder="你的企業在做什麼？想透過榮樹下完成什麼？"></textarea></div>
         </div>
         <div class="submit-row">
           <button class="btn btn-amber" type="submit">送出合流申請 <span class="arr" aria-hidden="true">→</span></button>
-          <p id="formnote">送出後會整理成一段訊息並複製，請貼到榮樹下官方 LINE@ 傳給我們。</p>
+          <p id="formnote">送出後我們會直接收到，盡快與你聯絡。</p>
         </div>
       </form>
       <div class="done" id="done" role="status" aria-live="polite" tabindex="-1">
-        <p class="eyebrow">已整理好</p>
+        <p class="eyebrow" id="done-eyebrow">已送出</p>
         <h3>謝謝你，願意坐下來。</h3>
-        <p class="lead" id="copied">以下訊息已複製，開啟 LINE@ 貼上送出即可。</p>
-        <pre id="summary"></pre>
+        <p class="lead" id="copied">我們已經收到你的合流申請，會盡快與你聯絡。想先聊聊，也可以直接加官方 LINE@。</p>
+        <pre id="summary" hidden></pre>
         <div class="ctas">
           <a class="btn btn-amber" href="https://lin.ee/OkaMlzx" target="_blank" rel="noopener">開啟官方 LINE@ <span class="arr" aria-hidden="true">↗</span></a>
           <button class="btn btn-ghost" type="button" id="again">修改內容</button>
@@ -687,9 +689,28 @@ footer .base a{text-decoration:none}footer .base a:hover{color:var(--amber-hi)}
     }
     sum.classList.remove('show');
     const text=`【榮樹下 合流申請】\n合作意向：${intent.value}\n企業／單位：${f.org.value.trim()}\n聯絡人：${f.who.value.trim()}\n聯絡方式：${f.contact.value.trim()}`+(f.msg.value.trim()?`\n想說的話：${f.msg.value.trim()}`:'');
-    document.getElementById('summary').textContent=text;
-    let ok=false;try{await navigator.clipboard.writeText(text);ok=true}catch(_){}
-    document.getElementById('copied').textContent=ok?'以下訊息已複製，開啟 LINE@ 貼上送出即可。':'請長按或選取下方訊息複製，再開啟 LINE@ 貼上送出。';
+    // 2026-10-13：資料直接送進「活動報名即時通知」群（大樹作品通用接口），送不出去才退回「複製貼到 LINE@」
+    const btn=f.querySelector('button[type=submit]');btn.disabled=true;
+    const c=f.contact.value.trim(),isMail=c.includes('@');
+    let sent=false;
+    try{
+      const r=await fetch('/api/works/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+        site:'rongtree',name:f.who.value.trim(),phone:isMail?'':c,email:isMail?c:'',item:intent.value,
+        message:`企業／單位：${f.org.value.trim()}`+(f.msg.value.trim()?`\n想說的話：${f.msg.value.trim()}`:''),website:f.website.value})});
+      sent=r.ok&&(await r.json()).ok===true;
+    }catch(_){}
+    btn.disabled=false;
+    const pre=document.getElementById('summary');
+    if(sent){
+      document.getElementById('done-eyebrow').textContent='已送出';
+      document.getElementById('copied').textContent='我們已經收到你的合流申請，會盡快與你聯絡。想先聊聊，也可以直接加官方 LINE@。';
+      pre.textContent='';pre.hidden=true;
+    }else{
+      pre.hidden=false;pre.textContent=text;
+      let ok=false;try{await navigator.clipboard.writeText(text);ok=true}catch(_){}
+      document.getElementById('done-eyebrow').textContent='已整理好';
+      document.getElementById('copied').textContent=ok?'線上送出暫時沒成功，以下訊息已複製，開啟 LINE@ 貼上送出即可。':'線上送出暫時沒成功，請長按或選取下方訊息複製，再開啟 LINE@ 貼上送出。';
+    }
     f.style.display='none';done.classList.add('show');done.focus();
   });
   document.getElementById('again').addEventListener('click',()=>{done.classList.remove('show');f.style.display='';f.querySelector('button').focus()});
