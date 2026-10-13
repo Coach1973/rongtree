@@ -716,5 +716,47 @@ footer .base a{text-decoration:none}footer .base a:hover{color:var(--amber-hi)}
   document.getElementById('again').addEventListener('click',()=>{done.classList.remove('show');f.style.display='';f.querySelector('button').focus()});
 })();
 </script>
+<script>
+/* 節目單自動更新（2026-10-13 教練：SoundOn 上架新集數，這裡不用手動補）
+   上面靜態名單是底（含人工寫的簡介）；這段開頁時讀 /api/rongtree/episodes（伺服器讀 SoundOn RSS），
+   只把「靜態名單裡還沒有的集數」補進節目單、已播出清單、100 片葉子。讀不到就維持靜態名單，不影響頁面。 */
+(()=>{
+  const track=document.querySelector('#episodes .track'),onair=document.querySelector('.onair');
+  if(!track||!window.fetch)return;
+  const idOf=u=>(u.match(/episodes\/([0-9a-f-]{36})/)||[])[1];
+  const share3=(a,b)=>{a=a.replace(/[\s專訪‧\-]/g,'');b=b.replace(/[\s專訪‧\-]/g,'');for(let i=0;i+3<=a.length;i++)if(b.includes(a.substr(i,3)))return true;return false;};
+  fetch('/api/rongtree/episodes').then(r=>r.json()).then(d=>{
+    const have=new Set([...track.querySelectorAll('a[href*="/episodes/"]')].map(a=>idOf(a.href)));
+    const fresh=(d.episodes||[]).filter(e=>e.id&&!have.has(e.id));
+    if(!fresh.length)return;
+    const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const items=[...track.querySelectorAll('li')].map(li=>({no:+li.querySelector('.no').firstChild.textContent,name:li.querySelector('h3').textContent}));
+    let maxNo=Math.max(0,...items.map(i=>i.no)),newest=null;
+    fresh.forEach(e=>{
+      let no,kind;
+      if(e.version==='live'){const m=items.concat(newest?[newest]:[]).reverse().find(i=>share3(i.name,e.title));no=m?m.no:++maxNo;kind='LIVE';}
+      else{no=++maxNo;kind='EP';}
+      const nn=String(no).padStart(2,'0'),tag=kind==='LIVE'?'實況轉播版':'重點節錄版';
+      const li=document.createElement('li');li.className='rv in';
+      li.innerHTML=`<a href="${esc(e.url)}" target="_blank" rel="noopener"><span class="no">${nn}<small>${kind}</small></span><span><h3>${esc(e.title.startsWith('專訪')?e.title:'專訪 '+e.title)}</h3><p>${esc(e.desc)}</p><span class="tag">${tag}</span></span><span class="dur">${esc(e.dur)}<small>${esc(e.date)}</small><span class="play" aria-hidden="true">▶</span></span></a>`;
+      track.appendChild(li);items.push({no,name:e.title});
+      if(kind==='EP'){newest={no,name:e.title,url:e.url};
+        const short=e.title.replace(/^專訪/,'').replace(/-/g,' ').trim();
+        if(onair){onair.querySelectorAll('.new').forEach(n=>n.remove());
+          const o=document.createElement('li');o.innerHTML=`<a href="${esc(e.url)}" target="_blank" rel="noopener"><b>EP.${nn}</b><span>${esc(short)}<span class="new">NEW</span></span><i aria-hidden="true">▶</i></a>`;onair.insertBefore(o,onair.firstChild);}
+        const leaf=[...document.querySelectorAll('#leaves .leaf')].find(l=>l.textContent.trim()===String(no));
+        if(leaf){leaf.className='leaf on';leaf.href=e.url;leaf.target='_blank';leaf.rel='noopener';leaf.title=`EP.${String(no).padStart(3,'0')} ${short}`;leaf.setAttribute('aria-label',`第 ${no} 集：${short}，已播出`);}
+      }
+    });
+    if(newest){
+      track.querySelectorAll('.tag-new').forEach(t=>t.remove());
+      const last=[...track.querySelectorAll('li')].reverse().find(li=>li.querySelector('.no small').textContent==='EP');
+      if(last){const t=document.createElement('span');t.className='tag tag-new';t.textContent='最新一集';last.querySelector('.tag').after(t);}
+      const lab=document.querySelector('.intro .label');if(lab)lab.textContent=`已播出 ‧ ${maxNo} 集`;
+      const lv=document.getElementById('leaves');if(lv)lv.setAttribute('aria-label',`100 集進度，已播出 ${maxNo} 集`);
+    }
+  }).catch(()=>{});
+})();
+</script>
 </body>
 </html>
