@@ -324,6 +324,31 @@ legend,.lbl{font:500 20px/1.4 var(--sans);letter-spacing:.1em;color:var(--on-ink
 @media (max-width:900px){.join .wrap{grid-template-columns:1fr}}
 @media (max-width:560px){.intent,.row{grid-template-columns:1fr}}
 
+/* PREP 訪談嘉賓前置作業（2026-10-14） */
+.prep .prep-head{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,80px);align-items:end}
+.prep .steps li{color:var(--on-paper);border-top-color:var(--paper-line)}
+.prep .steps li::before{color:var(--amber-deep)}
+.prep h3.sub-h{margin:56px 0 16px;font-size:clamp(22px,2.4vw,28px)}
+.slots{list-style:none;padding:0;margin:0;border-top:1px solid var(--paper-line)}
+.slots li{display:grid;grid-template-columns:220px 1fr auto;gap:16px;align-items:center;padding:16px 0;border-bottom:1px solid var(--paper-line)}
+.slots .when{font-weight:700;font-variant-numeric:tabular-nums}
+.slots .when small{display:block;font-weight:400;color:var(--on-paper-mute);font-size:20px}
+.slots .who{color:var(--on-paper)}.slots .who.none{color:var(--on-paper-mute)}
+.slots a{text-decoration:none;white-space:nowrap}
+.slots a.go{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;border-radius:999px;background:var(--amber);color:#1a1206;font-weight:500}
+.slots a.go:hover{background:var(--amber-hi)}
+.slots a.ok{color:var(--amber-deep);font-weight:700}
+.guests{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.guests li{background:var(--paper-2);border-radius:var(--r);padding:22px;display:grid;grid-template-columns:72px 1fr;gap:16px;align-items:start}
+.guests .ph{width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid var(--amber-deep);background:var(--paper-line);display:grid;place-items:center;font:900 28px/1 var(--serif);color:var(--amber-deep)}
+.guests b{display:block;font:600 21px/1.4 var(--serif)}
+.guests .t{display:block;font-size:20px;color:var(--on-paper-mute)}
+.guests p{margin:8px 0 6px;font-size:20px;line-height:1.7}
+.guests .d{font-size:20px;color:var(--amber-deep)}
+.prep .empty{color:var(--on-paper-mute);border:1px dashed var(--paper-line);border-radius:var(--r);padding:18px 20px;margin:0}
+@media (max-width:900px){.prep .prep-head{grid-template-columns:1fr}}
+@media (max-width:640px){.slots li{grid-template-columns:1fr;gap:6px}}
+
 /* FOOTER */
 footer{background:var(--ink);padding:clamp(80px,10vw,130px) 0 40px;text-align:center;position:relative;overflow:hidden}
 .blessing{font:900 clamp(30px,4.4vw,58px)/1.45 var(--serif);max-width:15em;margin:0 auto}
@@ -359,6 +384,7 @@ footer .base a{text-decoration:none}footer .base a:hover{color:var(--amber-hi)}
         <li><a href="#eco">版圖</a></li>
         <li><a href="#hundred">百集計畫</a></li>
         <li><a href="#seats">樹蔭席</a></li>
+        <li><a href="#prep">前置作業</a></li>
       </ul>
     </nav>
     <a class="btn btn-amber" href="#join">預約合作</a>
@@ -710,6 +736,29 @@ footer .base a{text-decoration:none}footer .base a:hover{color:var(--amber-hi)}
     </div>
   </div>
 </section>
+
+<!-- PREP 訪談嘉賓前置作業：接下來的訪談＋來賓資料表；交了資料的來賓公開列出（2026-10-14 教練） -->
+<section class="paper sec prep" id="prep" aria-labelledby="prep-h">
+  <div class="wrap">
+    <div class="prep-head rv">
+      <div><p class="eyebrow">訪談嘉賓前置作業</p>
+        <h2 id="prep-h">坐到榕樹下之前，<br>先讓我們認識你。</h2></div>
+      <div>
+        <p class="lead">受邀的來賓，請在訪談前找到自己的場次，花 10 分鐘填寫來賓資料表。主持人會先讀過，現場就能直接聊到你最動人的故事。</p>
+        <ol class="steps">
+          <li>在下方找到你的訪談場次</li>
+          <li>點「填寫來賓資料表」，留下你的故事與照片</li>
+          <li>送出後，你會出現在「已交資料的來賓」</li>
+        </ol>
+      </div>
+    </div>
+    <h3 class="sub-h rv">接下來的訪談</h3>
+    <ul class="slots" id="prep-slots" aria-live="polite"><li><span class="who none">讀取中…</span></li></ul>
+    <h3 class="sub-h rv">已交資料的來賓</h3>
+    <ul class="guests" id="prep-guests" aria-live="polite"></ul>
+    <p class="empty" id="prep-guests-empty" hidden>還沒有來賓交回資料，第一位會出現在這裡。</p>
+  </div>
+</section>
 </main>
 
 <footer>
@@ -797,6 +846,27 @@ footer .base a{text-decoration:none}footer .base a:hover{color:var(--amber-hi)}
     f.style.display='none';done.classList.add('show');done.focus();
   });
   document.getElementById('again').addEventListener('click',()=>{done.classList.remove('show');f.style.display='';f.querySelector('button').focus()});
+})();
+</script>
+<script>
+/* 訪談嘉賓前置作業：讀 /api/rongtree/prep（行程表裡接下來的榮樹下訪談＋已交資料的來賓，只含公開欄位） */
+(()=>{
+  const slots=document.getElementById('prep-slots'),guests=document.getElementById('prep-guests'),empty=document.getElementById('prep-guests-empty');
+  const esc=t=>String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const day=(d,s,e)=>{const x=new Date(d+'T00:00:00+08:00');return `${x.getMonth()+1}/${x.getDate()}（${'日一二三四五六'[x.getDay()]}）<small>${s}${e?'–'+e:''}</small>`;};
+  fetch('/api/rongtree/prep',{cache:'no-store'}).then(r=>r.json()).then(d=>{
+    const up=d.upcoming||[];
+    slots.innerHTML=up.length?up.map(u=>`<li><span class="when">${day(u.date,u.start,u.end)}</span>`+
+      `<span class="who${u.guest?'':' none'}">${u.guest?esc(u.guest):'來賓邀請中'}${u.tentative?'（時間待確認）':''}</span>`+
+      (u.form?(u.submitted?`<a class="ok" href="${esc(u.form)}" target="_blank" rel="noopener">✓ 已交資料　修改</a>`
+                         :`<a class="go" href="${esc(u.form)}" target="_blank" rel="noopener">填寫來賓資料表 →</a>`):'<span></span>')+`</li>`).join('')
+      :'<li><span class="who none">接下來兩個月還沒有排定的訪談。</span></li>';
+    const g=d.guests||[];
+    guests.innerHTML=g.map(x=>`<li>${x.photo?`<img class="ph" src="${esc(x.photo)}" alt="${esc(x.name)}" loading="lazy">`:`<span class="ph" aria-hidden="true">${esc((x.name||'?').slice(0,1))}</span>`}`+
+      `<div><b>${esc(x.name)}</b><span class="t">${esc(x.title)}</span>${x.line?`<p>${esc(x.line)}</p>`:''}`+
+      (x.date?`<span class="d">訪談 ${day(x.date,x.start,'').replace(/<\/?small>/g,' ')}</span>`:'')+`</div></li>`).join('');
+    empty.hidden=g.length>0;
+  }).catch(()=>{slots.innerHTML='<li><span class="who none">暫時讀不到訪談清單，請稍後再試。</span></li>'});
 })();
 </script>
 <script>
