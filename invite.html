@@ -53,8 +53,14 @@ em{font-style:normal;color:var(--amber-hi)}
 .hero .lead{color:var(--on-ink)}
 .hero > .wrap{position:relative;z-index:2;padding-bottom:clamp(56px,9vw,96px);padding-top:120px;width:100%}
 .brand{position:absolute;top:22px;left:0;right:0;z-index:3}
-.brand a{display:inline-block;font:900 clamp(28px,5vw,38px)/1.2 var(--serif);letter-spacing:.14em;text-decoration:none;color:#fff;padding:10px 22px;border-radius:999px;background:rgba(14,23,18,.72);box-shadow:0 2px 14px rgba(14,23,18,.45),inset 0 0 0 1px rgba(255,255,255,.18);text-shadow:0 1px 6px rgba(0,0,0,.6)}
-.brand a span{color:var(--amber-hi)}
+.brand .wrap{display:flex;flex-wrap:wrap;gap:12px}
+.brand a{display:inline-flex;align-items:center;gap:8px;font:900 clamp(24px,4.4vw,30px)/1 var(--serif);letter-spacing:.12em;text-decoration:none;padding:14px 26px;border-radius:999px;transition:transform .15s,background .15s}
+.brand a i{font-style:normal;font-size:.8em;opacity:.8}
+.brand a:hover{transform:translateY(-2px)}
+.brand .b-home{background:var(--amber);color:var(--ink);box-shadow:0 3px 14px rgba(14,23,18,.45)}
+.brand .b-home:hover{background:var(--amber-hi)}
+.brand .b-seat{background:rgba(14,23,18,.72);color:#fff;box-shadow:0 3px 14px rgba(14,23,18,.45),inset 0 0 0 2px rgba(240,196,106,.8);text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.brand .b-seat:hover{background:rgba(14,23,18,.88)}
 .dear{font:600 clamp(22px,2.6vw,26px)/1.5 var(--serif);color:var(--amber-hi);margin:0 0 14px;min-height:1.5em}
 .inviter{display:flex;align-items:center;gap:16px;margin:0 0 26px;padding:14px 22px 14px 14px;border-radius:999px;background:rgba(14,23,18,.62);box-shadow:inset 0 0 0 1px var(--line-ink);width:fit-content;max-width:100%}
 .inviter[hidden]{display:none}
@@ -113,9 +119,9 @@ footer a{color:var(--on-ink)}
 </head>
 <body>
 
-<section class="hero" aria-labelledby="hero-h">
+<section class="hero" id="top" aria-labelledby="hero-h">
   <img src="img/hero-banyan.jpg" alt="" width="1800" height="1200">
-  <div class="brand"><div class="wrap"><a href="./">榮樹下 <span>‧</span> 嘉賓席</a></div></div>
+  <div class="brand"><div class="wrap"><a class="b-home" href="./" aria-label="前往榮樹下網站">榮樹下 <i aria-hidden="true">›</i></a><a class="b-seat" href="#top" aria-label="回到嘉賓席邀請函首頁">嘉賓席</a></div></div>
   <div class="wrap">
     <div class="inviter" id="inviter" hidden>
       <span class="av" id="inv-av" aria-hidden="true"></span>
