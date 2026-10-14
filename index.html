@@ -355,8 +355,9 @@ footer{background:var(--ink);padding:clamp(80px,10vw,130px) 0 40px;text-align:ce
 .blessing em{font-style:normal;color:var(--amber-hi)}
 footer .credits{margin-top:40px;display:flex;justify-content:center;gap:10px 34px;flex-wrap:wrap;font-size:20px;color:var(--on-ink-mute);letter-spacing:.1em}
 footer .credits b{color:var(--on-ink);font-weight:500;margin-left:6px}
-footer .base{margin-top:70px;padding-top:24px;border-top:1px solid var(--line-ink);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:20px;color:var(--on-ink-mute)}
-footer .base a{text-decoration:none}footer .base a:hover{color:var(--amber-hi)}
+/* 2026-10-14 教練指示：頁尾版權＋連結一排太長會折行，字縮到 16px（唯一刻意低於 20px 的地方） */
+footer .base{margin-top:70px;padding-top:24px;border-top:1px solid var(--line-ink);display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px 28px;font-size:16px;color:var(--on-ink-mute);text-align:center}
+footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{color:var(--amber-hi)}
 
 /* reveal */
 .rv{opacity:0;transform:translateY(18px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
