@@ -858,7 +858,7 @@ footer .base a{text-decoration:none}footer .base a:hover{color:var(--amber-hi)}
     const up=d.upcoming||[];
     slots.innerHTML=up.length?up.map(u=>`<li><span class="when">${day(u.date,u.start,u.end)}</span>`+
       `<span class="who${u.guest?'':' none'}">${u.guest?esc(u.guest):'來賓邀請中'}${u.tentative?'（時間待確認）':''}</span>`+
-      (u.form?(u.submitted?`<a class="ok" href="${esc(u.form)}" target="_blank" rel="noopener">✓ 已交資料　修改</a>`
+      (u.form?(u.submitted?`<a class="ok" href="${esc(u.form)}" target="_blank" rel="noopener">✓ 已交資料${u.count>1?`（${u.count} 位）`:''}　修改或新增</a>`
                          :`<a class="go" href="${esc(u.form)}" target="_blank" rel="noopener">填寫來賓資料表 →</a>`):'<span></span>')+`</li>`).join('')
       :'<li><span class="who none">接下來兩個月還沒有排定的訪談。</span></li>';
     const g=d.guests||[];
