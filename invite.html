@@ -47,13 +47,16 @@ em{font-style:normal;color:var(--amber-hi)}
 .hero{position:relative;min-height:92vh;display:flex;align-items:flex-end;overflow:hidden}
 .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.42}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,23,18,.25) 0%,rgba(14,23,18,.7) 55%,var(--ink) 100%)}
-.hero .wrap{position:relative;z-index:1;padding-bottom:clamp(56px,9vw,96px);padding-top:120px;width:100%}
+.hero > .wrap{position:relative;z-index:1;padding-bottom:clamp(56px,9vw,96px);padding-top:120px;width:100%}
 .brand{position:absolute;top:22px;left:0;right:0;z-index:2}
 .brand a{font:600 20px/1 var(--serif);letter-spacing:.12em;text-decoration:none;color:var(--on-ink)}
 .brand a span{color:var(--amber)}
 .dear{font:600 clamp(22px,2.6vw,26px)/1.5 var(--serif);color:var(--amber-hi);margin:0 0 14px;min-height:1.5em}
-.from{font-size:18px;color:var(--on-ink-mute);margin:22px 0 0}
-.from b{color:var(--on-ink);font-weight:600}
+.inviter{display:flex;align-items:center;gap:16px;margin:0 0 26px;padding:14px 22px 14px 14px;border-radius:999px;background:rgba(14,23,18,.62);box-shadow:inset 0 0 0 1px var(--line-ink);width:fit-content;max-width:100%}
+.inviter[hidden]{display:none}
+.inviter .av{flex:none;width:58px;height:58px;border-radius:50%;background:var(--amber);color:var(--ink);font:900 26px/58px var(--serif);text-align:center}
+.inviter b{display:block;font:600 21px/1.4 var(--serif);color:var(--on-ink)}
+.inviter small{display:block;font-size:16px;line-height:1.5;color:var(--on-ink-mute)}
 .btn{display:inline-flex;align-items:center;gap:10px;font:700 20px/1 var(--sans);padding:18px 30px;border-radius:999px;text-decoration:none;border:0;cursor:pointer;letter-spacing:.06em}
 .btn-amber{background:var(--amber);color:var(--ink)}
 .btn-amber:hover{background:var(--amber-hi)}
@@ -109,11 +112,14 @@ footer a{color:var(--on-ink)}
   <img src="img/hero-banyan.jpg" alt="" width="1800" height="1200">
   <div class="brand"><div class="wrap"><a href="./">榮樹下 <span>‧</span> 嘉賓席</a></div></div>
   <div class="wrap">
+    <div class="inviter" id="inviter" hidden>
+      <span class="av" id="inv-av" aria-hidden="true"></span>
+      <span><b id="inv-name"></b><small id="inv-title"></small></span>
+    </div>
     <p class="eyebrow">嘉賓席邀請函</p>
     <p class="dear" id="dear"></p>
     <h1 id="hero-h">這一集，<br>想請你<em>坐到樹下</em>。</h1>
     <p class="lead">榮樹下每一集，會留 3 到 5 個座位，給願意為公益出一份力的朋友。你不用上台、不用評分，只要坐下來，聽完一個故事。</p>
-    <p class="from" id="from" hidden>邀請人：<b id="from-name"></b></p>
     <div class="ctas">
       <a class="btn btn-amber" href="#reply">我願意 <span aria-hidden="true">→</span></a>
       <a class="btn btn-ghost" href="#what">嘉賓席做什麼</a>
@@ -166,7 +172,7 @@ footer a{color:var(--on-ink)}
       <div class="done" id="done" role="status" aria-live="polite" tabindex="-1">
         <p class="eyebrow">回函已收到</p>
         <h3>謝謝你，我們樹下見。</h3>
-        <p class="lead">我們會依節目主題，跟你約適合的一集。想先聊聊，也可以直接加榮樹下官方 LINE@。</p>
+        <p class="lead" id="done-lead">我們會依節目主題，跟你約適合的一集。想先聊聊，也可以直接加榮樹下官方 LINE@。</p>
         <div class="ctas" style="justify-content:center"><a class="btn btn-amber" href="https://lin.ee/OkaMlzx" target="_blank" rel="noopener">開啟榮樹下官方 LINE@ ↗</a></div>
       </div>
     </div>
@@ -177,15 +183,17 @@ footer a{color:var(--on-ink)}
   <div class="wrap">
     <p class="eyebrow">把這份邀請函</p>
     <h2 id="share-h">傳給你想邀請的嘉賓</h2>
-    <p class="lead">填上你和對方的名字，邀請函就會寫上「某某您好」和邀請人，再一鍵傳出去。</p>
+    <p class="lead">填上你和對方的名字，邀請函最上方就會寫著「你的名字 邀請你」和「對方的名字，您好」。先按「看看朋友收到的樣子」看一眼，再一鍵傳出去。</p>
     <div class="share-row" style="margin-top:30px">
       <div class="field"><label for="s-from">你的名字（邀請人）</label><input id="s-from" maxlength="20" autocomplete="name"></div>
+      <div class="field"><label for="s-ft">你的單位或頭銜（選填）</label><input id="s-ft" maxlength="30" placeholder="例：榮樹下 主持人"></div>
       <div class="field"><label for="s-to">想邀請的嘉賓</label><input id="s-to" maxlength="20" placeholder="例：王大明 董事長"></div>
     </div>
     <div class="linkbox" id="s-link" aria-live="polite"></div>
     <div class="ctas">
       <button class="btn btn-amber" type="button" id="s-line">用 LINE 傳</button>
       <button class="btn btn-ghost" type="button" id="s-copy">複製邀請連結</button>
+      <a class="btn btn-ghost" id="s-open" href="#" target="_blank" rel="noopener">看看朋友收到的樣子</a>
     </div>
     <p class="copied" id="s-copied" role="status"></p>
   </div>
@@ -203,10 +211,17 @@ footer a{color:var(--on-ink)}
   var BASE = 'https://event.bymyway.com/curated/rongtree/invite.html';
   var q = new URLSearchParams(location.search);
   var clip = function(v, n){ return (v || '').replace(/\s+/g, ' ').trim().slice(0, n); };
-  var to = clip(q.get('to'), 20), from = clip(q.get('from'), 20);
+  var to = clip(q.get('to'), 20), from = clip(q.get('from'), 20), ft = clip(q.get('ft'), 30);
 
   if (to) { document.getElementById('dear').textContent = to + '，您好：'; document.getElementById('r-name').value = to; }
-  if (from) { document.getElementById('from-name').textContent = from; document.getElementById('from').hidden = false; }
+  if (from) {
+    document.getElementById('inv-av').textContent = from.slice(0, 1);
+    document.getElementById('inv-name').textContent = from + ' 邀請你';
+    document.getElementById('inv-title').textContent = ft || '一起坐上榮樹下嘉賓席';
+    document.getElementById('inviter').hidden = false;
+    document.title = from + ' 邀請你坐上榮樹下嘉賓席';
+    document.getElementById('done-lead').textContent = '我們已經收到，也會告訴' + from + '。接下來會依節目主題，跟你約適合的一集。想先聊聊，也可以直接加榮樹下官方 LINE@。';
+  }
 
   // 回函：打大樹作品通用接口 /api/works/contact → 活動報名即時通知群（Telegram）
   var rf = document.getElementById('rf'), err = document.getElementById('errsum'), btn = document.getElementById('r-btn');
@@ -219,7 +234,7 @@ footer a{color:var(--on-ink)}
     err.classList.remove('on'); btn.disabled = true; btn.textContent = '送出中…';
     fetch('/api/works/contact', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({
       site:'rongtree', name:name, phone:isMail?'':c, email:isMail?c:'', item:'嘉賓席回函：我願意',
-      message: from ? ('邀請人：' + from) : '（直接打開邀請函，沒有邀請人）', website: rf.website.value
+      message: from ? ('邀請人：' + from + (ft ? '（' + ft + '）' : '')) : '（直接打開邀請函，沒有邀請人）', website: rf.website.value
     })}).then(function(r){ return r.json(); }).then(function(d){
       if (!d.ok) throw new Error(d.error || '送出失敗');
       rf.style.display = 'none'; var dn = document.getElementById('done'); dn.classList.add('on'); dn.focus();
@@ -230,18 +245,20 @@ footer a{color:var(--on-ink)}
   });
 
   // 傳出去：產生帶名字的邀請連結
-  var sf = document.getElementById('s-from'), st = document.getElementById('s-to'), box = document.getElementById('s-link'), tip = document.getElementById('s-copied');
+  var sf = document.getElementById('s-from'), sft = document.getElementById('s-ft'), st = document.getElementById('s-to'), so = document.getElementById('s-open'), box = document.getElementById('s-link'), tip = document.getElementById('s-copied');
   function link(){
-    var p = new URLSearchParams(); var f = clip(sf.value, 20), t = clip(st.value, 20);
-    if (t) p.set('to', t); if (f) p.set('from', f);
+    var p = new URLSearchParams(); var f = clip(sf.value, 20), t = clip(st.value, 20), g = clip(sft.value, 30);
+    if (t) p.set('to', t); if (f) p.set('from', f); if (f && g) p.set('ft', g);
     var s = p.toString(); return BASE + (s ? '?' + s : '');
   }
   function text(){
     var t = clip(st.value, 20);
     return (t ? t + '您好，' : '') + '誠摯邀請您坐上榮樹下 Podcast 的「嘉賓席」，聽完一個故事、提一個好問題，為公益掛上一片葉子。邀請函在這裡：\n' + link();
   }
-  function refresh(){ box.textContent = link(); tip.textContent = ''; }
-  sf.addEventListener('input', refresh); st.addEventListener('input', refresh); refresh();
+  // 還沒填名字時，「看看朋友收到的樣子」用範例名字示範
+  var SAMPLE = BASE + '?to=' + encodeURIComponent('王大明 董事長') + '&from=' + encodeURIComponent('吳大樹') + '&ft=' + encodeURIComponent('榮樹下 主持人');
+  function refresh(){ box.textContent = link(); tip.textContent = ''; so.href = clip(sf.value, 20) ? link() : SAMPLE; }
+  [sf, sft, st].forEach(function(el){ el.addEventListener('input', refresh); }); refresh();
   document.getElementById('s-line').addEventListener('click', function(){
     window.open('https://line.me/R/share?text=' + encodeURIComponent(text()), '_blank', 'noopener');
   });
