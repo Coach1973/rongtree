@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>嘉賓席邀請函｜榮樹下</title>
+<meta name="description" content="榮樹下 Podcast 嘉賓席邀請函：聽完一個故事，提一個好問題，為公益掛上一片葉子。">
+<meta property="og:title" content="嘉賓席邀請函｜榮樹下">
+<meta property="og:description" content="這一集，想請你坐到樹下。聽完一個故事，提一個好問題，為公益掛上一片葉子。">
+<meta property="og:image" content="https://event.bymyway.com/curated/rongtree/img/hero-banyan.jpg">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0e1712">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0e1712; --ink-2:#14211a; --ink-3:#1c2d23;
+  --paper:#f2ead8; --paper-2:#e8dcc3; --paper-line:#cdbd9c;
+  --on-ink:#efe6d2; --on-ink-mute:#a7b2a3; --on-paper:#1d2a22; --on-paper-mute:#5b6656;
+  --amber:#d9a441; --amber-hi:#f0c46a; --amber-deep:#9a6a1c;
+  --line-ink:rgba(239,230,210,.14);
+  --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --r:6px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ink);color:var(--on-ink);font:400 20px/1.85 var(--sans);letter-spacing:.02em;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--amber-hi);outline-offset:3px;border-radius:2px}
+.wrap{max-width:860px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+h1,h2,h3{font-family:var(--serif);font-weight:900;margin:0;letter-spacing:.02em}
+h1{font-size:clamp(38px,7vw,68px);line-height:1.22}
+h2{font-size:clamp(30px,4.6vw,46px);line-height:1.3}
+h3{font-size:clamp(21px,2.4vw,25px);line-height:1.4;font-weight:600}
+em{font-style:normal;color:var(--amber-hi)}
+.eyebrow{font:500 18px/1.4 var(--sans);letter-spacing:.2em;color:var(--amber);margin:0 0 14px}
+.paper .eyebrow{color:var(--amber-deep)}
+.lead{font-size:clamp(19px,2vw,21px);color:var(--on-ink-mute);margin:18px 0 0}
+.paper .lead{color:var(--on-paper-mute)}
+.sec{padding:clamp(64px,10vw,110px) 0}
+.paper{background:var(--paper);color:var(--on-paper)}
+
+/* HERO */
+.hero{position:relative;min-height:92vh;display:flex;align-items:flex-end;overflow:hidden}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.42}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,23,18,.25) 0%,rgba(14,23,18,.7) 55%,var(--ink) 100%)}
+.hero .wrap{position:relative;z-index:1;padding-bottom:clamp(56px,9vw,96px);padding-top:120px;width:100%}
+.brand{position:absolute;top:22px;left:0;right:0;z-index:2}
+.brand a{font:600 20px/1 var(--serif);letter-spacing:.12em;text-decoration:none;color:var(--on-ink)}
+.brand a span{color:var(--amber)}
+.dear{font:600 clamp(22px,2.6vw,26px)/1.5 var(--serif);color:var(--amber-hi);margin:0 0 14px;min-height:1.5em}
+.from{font-size:18px;color:var(--on-ink-mute);margin:22px 0 0}
+.from b{color:var(--on-ink);font-weight:600}
+.btn{display:inline-flex;align-items:center;gap:10px;font:700 20px/1 var(--sans);padding:18px 30px;border-radius:999px;text-decoration:none;border:0;cursor:pointer;letter-spacing:.06em}
+.btn-amber{background:var(--amber);color:var(--ink)}
+.btn-amber:hover{background:var(--amber-hi)}
+.btn-ghost{background:transparent;color:var(--on-ink);box-shadow:inset 0 0 0 1px var(--line-ink)}
+.ctas{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+
+/* 兩件事 */
+.two{display:grid;gap:22px;margin-top:40px}
+@media(min-width:720px){.two{grid-template-columns:1fr 1fr}}
+.two article{background:var(--paper-2);border:1px solid var(--paper-line);border-radius:var(--r);padding:28px 26px}
+.two .n{font:900 34px/1 var(--serif);color:var(--amber-deep)}
+.two h3{margin:12px 0 8px}
+.two p{margin:0;color:var(--on-paper-mute);font-size:19px}
+.note{margin:30px 0 0;font-size:17px;color:var(--on-paper-mute)}
+
+/* 祝福 */
+.bless{list-style:none;margin:36px 0 0;padding:0}
+.bless li{font:400 clamp(20px,2.3vw,23px)/1.8 var(--serif);padding:14px 0;border-bottom:1px solid var(--line-ink)}
+.bless li:last-child{border-bottom:0}
+
+/* 回函 */
+.reply-card{background:var(--ink-2);border:1px solid var(--line-ink);border-radius:var(--r);padding:clamp(24px,4vw,40px);margin-top:36px}
+.field{margin:0 0 20px}
+.field label{display:block;font-size:18px;margin:0 0 8px;color:var(--on-ink)}
+.req{color:var(--amber)}
+input{width:100%;font:400 20px/1.4 var(--sans);padding:14px 16px;border-radius:var(--r);border:1px solid var(--line-ink);background:var(--ink);color:var(--on-ink)}
+input::placeholder{color:#6f7a6c}
+.errsum{display:none;color:#ffb4a2;margin:0 0 16px;font-size:18px}
+.errsum.on{display:block}
+.reply-card .btn{width:100%;justify-content:center;font-size:22px;padding:20px}
+.fine{font-size:16px;color:var(--on-ink-mute);margin:16px 0 0;text-align:center}
+.done{display:none;text-align:center;padding:10px 0}
+.done.on{display:block}
+.done h3{font-size:clamp(26px,3.4vw,34px);margin:6px 0 10px}
+
+/* 傳出去 */
+.share .field label{color:var(--on-paper)}
+.share input{background:#fffaf0;color:var(--on-paper);border-color:var(--paper-line)}
+.share-row{display:grid;gap:16px}
+@media(min-width:640px){.share-row{grid-template-columns:1fr 1fr}}
+.linkbox{margin-top:8px;padding:14px 16px;border-radius:var(--r);background:#fffaf0;border:1px dashed var(--paper-line);font-size:16px;word-break:break-all;color:var(--on-paper-mute)}
+.share .ctas{margin-top:20px}
+.share .btn-ghost{color:var(--on-paper);box-shadow:inset 0 0 0 1px var(--paper-line)}
+.copied{font-size:17px;color:var(--amber-deep);margin:12px 0 0;min-height:1.6em}
+
+footer{padding:40px 0 56px;font-size:16px;color:var(--on-ink-mute);text-align:center}
+footer a{color:var(--on-ink)}
+</style>
+</head>
+<body>
+
+<section class="hero" aria-labelledby="hero-h">
+  <img src="img/hero-banyan.jpg" alt="" width="1800" height="1200">
+  <div class="brand"><div class="wrap"><a href="./">榮樹下 <span>‧</span> 嘉賓席</a></div></div>
+  <div class="wrap">
+    <p class="eyebrow">嘉賓席邀請函</p>
+    <p class="dear" id="dear"></p>
+    <h1 id="hero-h">這一集，<br>想請你<em>坐到樹下</em>。</h1>
+    <p class="lead">榮樹下每一集，會留 3 到 5 個座位，給願意為公益出一份力的朋友。你不用上台、不用評分，只要坐下來，聽完一個故事。</p>
+    <p class="from" id="from" hidden>邀請人：<b id="from-name"></b></p>
+    <div class="ctas">
+      <a class="btn btn-amber" href="#reply">我願意 <span aria-hidden="true">→</span></a>
+      <a class="btn btn-ghost" href="#what">嘉賓席做什麼</a>
+    </div>
+  </div>
+</section>
+
+<section class="sec paper" id="what" aria-labelledby="what-h">
+  <div class="wrap">
+    <p class="eyebrow">坐上嘉賓席，只做兩件事</p>
+    <h2 id="what-h">聽完一個故事，<br>為公益掛上一片葉子。</h2>
+    <div class="two">
+      <article><span class="n">01</span><h3>提一個好問題</h3>
+        <p>「你是怎麼熬過最難的那段時間？」一個好問題，能讓故事走得更深，也讓更多人聽見。</p></article>
+      <article><span class="n">02</span><h3>掛一片葉子</h3>
+        <p>聽完之後，說出自己願意出的一份力：一個通路、一群朋友、一隊員工報名路跑。每一份承諾，都會掛在承諾牆上公開致謝。</p></article>
+    </div>
+    <p class="note">承諾以你自己的資源為限，量力而為就好。做到的那一片葉子，會變成金色。</p>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="bless-h">
+  <div class="wrap">
+    <p class="eyebrow">給收到邀請函的你</p>
+    <h2 id="bless-h">我們的祝福</h2>
+    <ul class="bless">
+      <li>願你的一個好問題，讓一個故事被更多人聽見。</li>
+      <li>願你出的一份力，剛好落在最需要的人手上。</li>
+      <li>願你坐在樹下的那一刻，遇見同樣願意轉身的朋友。</li>
+      <li>願你掛上的那片葉子，有一天變成金色。</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="reply" aria-labelledby="reply-h" style="padding-top:0">
+  <div class="wrap">
+    <p class="eyebrow">嘉賓席邀請函・回函</p>
+    <h2 id="reply-h">留下名字，<br>按下「我願意」。</h2>
+    <div class="reply-card">
+      <form id="rf" novalidate>
+        <div class="errsum" id="errsum" role="alert" tabindex="-1"></div>
+        <div class="field"><label for="r-name">你的名字 <span class="req">*</span></label>
+          <input id="r-name" name="name" required autocomplete="name" maxlength="30"></div>
+        <div class="field"><label for="r-contact">手機或 Email <span class="req">*</span></label>
+          <input id="r-contact" name="contact" required autocomplete="tel" maxlength="80" placeholder="我們用來跟你約時間"></div>
+        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
+        <button class="btn btn-amber" type="submit" id="r-btn">我願意</button>
+        <p class="fine">送出後我們會直接收到，再跟你約適合的一集。</p>
+      </form>
+      <div class="done" id="done" role="status" aria-live="polite" tabindex="-1">
+        <p class="eyebrow">回函已收到</p>
+        <h3>謝謝你，我們樹下見。</h3>
+        <p class="lead">我們會依節目主題，跟你約適合的一集。想先聊聊，也可以直接加榮樹下官方 LINE@。</p>
+        <div class="ctas" style="justify-content:center"><a class="btn btn-amber" href="https://lin.ee/OkaMlzx" target="_blank" rel="noopener">開啟榮樹下官方 LINE@ ↗</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec paper share" id="share" aria-labelledby="share-h">
+  <div class="wrap">
+    <p class="eyebrow">把這份邀請函</p>
+    <h2 id="share-h">傳給你想邀請的嘉賓</h2>
+    <p class="lead">填上你和對方的名字，邀請函就會寫上「某某您好」和邀請人，再一鍵傳出去。</p>
+    <div class="share-row" style="margin-top:30px">
+      <div class="field"><label for="s-from">你的名字（邀請人）</label><input id="s-from" maxlength="20" autocomplete="name"></div>
+      <div class="field"><label for="s-to">想邀請的嘉賓</label><input id="s-to" maxlength="20" placeholder="例：王大明 董事長"></div>
+    </div>
+    <div class="linkbox" id="s-link" aria-live="polite"></div>
+    <div class="ctas">
+      <button class="btn btn-amber" type="button" id="s-line">用 LINE 傳</button>
+      <button class="btn btn-ghost" type="button" id="s-copy">複製邀請連結</button>
+    </div>
+    <p class="copied" id="s-copied" role="status"></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a href="./">榮樹下</a>　邱裕榮與吳大樹談古論今聊家常<br>
+    <a href="https://www.bymyway.com/" target="_blank" rel="noopener">大樹教育</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var BASE = 'https://event.bymyway.com/curated/rongtree/invite.html';
+  var q = new URLSearchParams(location.search);
+  var clip = function(v, n){ return (v || '').replace(/\s+/g, ' ').trim().slice(0, n); };
+  var to = clip(q.get('to'), 20), from = clip(q.get('from'), 20);
+
+  if (to) { document.getElementById('dear').textContent = to + '，您好：'; document.getElementById('r-name').value = to; }
+  if (from) { document.getElementById('from-name').textContent = from; document.getElementById('from').hidden = false; }
+
+  // 回函：打大樹作品通用接口 /api/works/contact → 活動報名即時通知群（Telegram）
+  var rf = document.getElementById('rf'), err = document.getElementById('errsum'), btn = document.getElementById('r-btn');
+  rf.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = clip(rf.name.value, 30), c = clip(rf.contact.value, 80);
+    var isMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c), isPhone = c.replace(/\D/g, '').length >= 8;
+    var msg = !name ? '請填寫你的名字' : (!isMail && !isPhone) ? '請填寫正確的手機或 Email' : '';
+    if (msg) { err.textContent = msg; err.classList.add('on'); err.focus(); return; }
+    err.classList.remove('on'); btn.disabled = true; btn.textContent = '送出中…';
+    fetch('/api/works/contact', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({
+      site:'rongtree', name:name, phone:isMail?'':c, email:isMail?c:'', item:'嘉賓席回函：我願意',
+      message: from ? ('邀請人：' + from) : '（直接打開邀請函，沒有邀請人）', website: rf.website.value
+    })}).then(function(r){ return r.json(); }).then(function(d){
+      if (!d.ok) throw new Error(d.error || '送出失敗');
+      rf.style.display = 'none'; var dn = document.getElementById('done'); dn.classList.add('on'); dn.focus();
+    }).catch(function(x){
+      err.textContent = (x && x.message) || '送出失敗，請稍後再試'; err.classList.add('on');
+      btn.disabled = false; btn.textContent = '我願意';
+    });
+  });
+
+  // 傳出去：產生帶名字的邀請連結
+  var sf = document.getElementById('s-from'), st = document.getElementById('s-to'), box = document.getElementById('s-link'), tip = document.getElementById('s-copied');
+  function link(){
+    var p = new URLSearchParams(); var f = clip(sf.value, 20), t = clip(st.value, 20);
+    if (t) p.set('to', t); if (f) p.set('from', f);
+    var s = p.toString(); return BASE + (s ? '?' + s : '');
+  }
+  function text(){
+    var t = clip(st.value, 20);
+    return (t ? t + '您好，' : '') + '誠摯邀請您坐上榮樹下 Podcast 的「嘉賓席」，聽完一個故事、提一個好問題，為公益掛上一片葉子。邀請函在這裡：\n' + link();
+  }
+  function refresh(){ box.textContent = link(); tip.textContent = ''; }
+  sf.addEventListener('input', refresh); st.addEventListener('input', refresh); refresh();
+  document.getElementById('s-line').addEventListener('click', function(){
+    window.open('https://line.me/R/share?text=' + encodeURIComponent(text()), '_blank', 'noopener');
+  });
+  document.getElementById('s-copy').addEventListener('click', function(){
+    var done = function(){ tip.textContent = '已複製，貼到 LINE 或訊息裡就能傳出去。'; };
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text()).then(done, fallback); } else { fallback(); }
+    function fallback(){ var ta = document.createElement('textarea'); ta.value = text(); document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) {} ta.remove(); }
+  });
+})();
+</script>
+</body>
+</html>
