@@ -185,47 +185,72 @@ section{position:relative}
 .tenet p{color:var(--on-ink-mute);font-size:20px}
 @media (max-width:900px){.philo .wrap,.tenets{grid-template-columns:1fr}.tenet+.tenet{padding-left:0;border-left:0;border-top:1px solid var(--line-ink);margin-top:28px}.philo figure img{aspect-ratio:4/3}}
 
-/* EPISODES */
+/* EPISODES ＋ 100 集（2026-10-15 合併：1～100 格，已播出亮起來、點了看該集；空格子＝嘉賓招募） */
 .eps{background:var(--ink-2)}
-.eps .wrap{display:grid;grid-template-columns:320px 1fr;gap:clamp(40px,6vw,90px);align-items:start}
-.eps-side{position:sticky;top:100px}
-.eps-side img{border-radius:var(--r);width:100%;aspect-ratio:1;object-fit:cover;box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
-.eps-side h2{font-size:clamp(30px,3.4vw,42px);margin:28px 0 14px}
-.eps-side .btn{margin-top:26px}
-.track{list-style:none;margin:0;padding:0;counter-reset:t}
-.track li{border-top:1px solid var(--line-ink)}
-.track li:last-child{border-bottom:1px solid var(--line-ink)}
-.track a{display:grid;grid-template-columns:80px 1fr auto;gap:22px;padding:30px 6px;text-decoration:none;transition:background .25s var(--ease)}
-.track a:hover{background:rgba(217,164,65,.06)}
-.track .no{font:900 40px/1 var(--serif);color:var(--amber)}
-.track .no small{display:block;font:500 20px/1 var(--sans);letter-spacing:.1em;color:var(--on-ink-mute);margin-top:10px}
-.track h3{font-size:26px}
-.track p{font-size:20px;color:var(--on-ink-mute);margin-top:8px;max-width:40em}
-.track .tag{display:inline-block;margin:14px 10px 0 0;font-size:20px;letter-spacing:.08em;padding:4px 14px;border:1px solid var(--line-ink);border-radius:999px;color:var(--on-ink-mute)}
-.track .dur{font:500 20px/1 var(--sans);color:var(--on-ink);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.track .dur small{display:block;color:var(--on-ink-mute);font-size:20px;margin-top:8px}
-.track .play{display:inline-grid;place-items:center;width:42px;height:42px;border-radius:50%;border:1px solid var(--amber);margin-top:14px;color:var(--amber);transition:background .2s,color .2s}
-.track a:hover .play{background:var(--amber);color:var(--ink)}
-.track .tag-new{background:var(--amber);color:#1a1206;border-color:var(--amber);font-weight:700}
-@media (max-width:900px){.eps .wrap{grid-template-columns:1fr}.eps-side{position:static;max-width:420px}}
-@media (max-width:560px){.track a{grid-template-columns:52px 1fr}.track .dur{grid-column:2;text-align:left}.track .no{font-size:30px}}
+.eps h2 .num{color:var(--amber-hi)}
+.eps-head{display:grid;grid-template-columns:150px minmax(0,1fr) minmax(0,1.1fr);gap:clamp(24px,4vw,56px);align-items:end}
+.eps-head img{border-radius:var(--r);width:100%;aspect-ratio:1;object-fit:cover;box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+.eps-head h2{margin-top:14px}
+.eps-head .btn{margin-top:22px;line-height:1.35;padding-top:8px;padding-bottom:8px}
+.legend{display:flex;gap:10px 28px;margin:clamp(40px,5vw,64px) 0 18px;font-size:20px;color:var(--on-ink-mute);flex-wrap:wrap;scroll-margin-top:96px}
+.legend i{display:inline-block;width:20px;height:20px;border-radius:8px 0 8px 0;margin-right:8px;vertical-align:-2px;border:1px solid rgba(239,230,210,.35)}
+.legend i.on{background:var(--amber);border-color:var(--amber)}
+.legend b{color:var(--amber-hi);font-weight:700}
+.grid100{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:8px}
+.grid100 li{display:flex;min-width:0}
+.cell{flex:1;min-width:0;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px 4px;margin:0;border:1px solid var(--line-ink);border-radius:22px 0 22px 0;background:rgba(239,230,210,.025);color:rgba(239,230,210,.5);font:500 20px/1.15 var(--sans);letter-spacing:0;font-variant-numeric:tabular-nums;text-decoration:none;cursor:pointer;transition:border-color .2s,background .2s,color .2s}
+.cell .w{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:rgba(217,164,65,.75)}
+.cell:not(.on):hover{border-color:var(--amber);color:var(--on-ink)}
+.cell.on{background:var(--amber);border-color:var(--amber);color:#1a1206;font-weight:700}
+.cell.on .w{color:#1a1206}
+.cell.on:hover{background:var(--amber-hi)}
+.eps .steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 28px;margin-top:clamp(40px,5vw,64px)}
+@media (max-width:960px){
+  .eps-head{grid-template-columns:120px minmax(0,1fr)}
+  .eps-head > :last-child{grid-column:1/-1}
+  .cell.on .w{display:none}.cell.on::after{content:"▶";font-size:20px}
+  .eps .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .eps-head{grid-template-columns:72px minmax(0,1fr);gap:18px 16px;align-items:center}
+  .grid100{grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+  .cell{min-height:64px;padding:6px 0;border-radius:16px 0 16px 0}
+  .eps .steps{grid-template-columns:1fr}
+}
+/* 點已播出格子跳出的那一集 */
+html:has(.ep-dlg[open]){overflow:hidden}
+.ep-dlg{width:min(680px,calc(100% - 24px));max-width:none;max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;padding:0;border:1px solid rgba(217,164,65,.6);border-radius:12px;background:var(--ink-2);color:var(--on-ink);box-shadow:0 40px 80px -30px rgba(0,0,0,.9)}
+.ep-dlg::backdrop{background:rgba(6,10,8,.72)}
+.dlg-in{position:relative;padding:clamp(24px,4vw,40px)}
+.dlg-x{position:absolute;top:10px;right:10px;width:52px;height:52px;border:0;border-radius:50%;background:transparent;color:var(--on-ink);font:400 34px/1 var(--sans);cursor:pointer}
+.dlg-x:hover{background:rgba(239,230,210,.08);color:var(--amber-hi)}
+.ep-dlg h3{font-size:clamp(26px,3vw,32px);font-weight:900;margin:10px 56px 4px 0}
+.ep-dlg .ver{border-top:1px solid var(--line-ink);margin-top:24px;padding-top:22px}
+.ep-dlg .tag{display:inline-block;font-size:20px;letter-spacing:.08em;padding:4px 14px;border:1px solid var(--line-ink);border-radius:999px;color:var(--on-ink-mute)}
+.ep-dlg h4{font:600 22px/1.5 var(--serif);margin:12px 0 4px}
+.ep-dlg .meta{font-size:20px;color:var(--amber);font-variant-numeric:tabular-nums}
+.ep-dlg .ver p:not(.meta){font-size:20px;color:var(--on-ink-mute);margin:10px 0 18px;white-space:pre-line}
+.ep-dlg .more{border-top:1px solid var(--line-ink);margin-top:26px;padding-top:20px}
+.ep-dlg .more a{display:flex;justify-content:space-between;gap:10px;padding:10px 0;font-size:20px;color:var(--amber-hi);text-decoration:none}
+.ep-dlg .more a:hover{text-decoration:underline;text-underline-offset:4px}
 
-/* ECOSYSTEM — the roots */
+/* ECOSYSTEM 主題清單（2026-10-15 改版：一個主題一行，以後加主題就多一行） */
 .eco-head h2{font-size:clamp(30px,3.8vw,48px)}
 .eco-head{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:end;margin-bottom:24px}
 .canopy{height:14px;border-top:2px solid var(--on-paper);border-bottom:1px solid var(--paper-line);margin-top:48px}
-.eco-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(16px,2vw,28px)}
-.root{position:relative;padding-top:var(--drop,40px)}
-.root::before{content:"";position:absolute;top:0;left:22px;width:1px;height:var(--drop,40px);background:linear-gradient(var(--on-paper),var(--amber-deep))}
-.root::after{content:"";position:absolute;left:19px;top:calc(var(--drop,40px) - 4px);width:7px;height:7px;border-radius:50%;background:var(--amber-deep)}
-.root:nth-child(1){--drop:28px}.root:nth-child(2){--drop:96px}.root:nth-child(3){--drop:20px}.root:nth-child(4){--drop:20px}
-.root-card{background:#fbf6ea;border:1px solid var(--paper-line);border-radius:var(--r);overflow:hidden;margin-top:10px;transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
-.root-card:hover{transform:translateY(-4px);box-shadow:0 24px 40px -28px rgba(60,40,10,.5)}
-.root-card img{aspect-ratio:16/9;object-fit:cover;width:100%}
-.root-body{padding:28px 30px 30px}
-.root-body .k{font:500 20px/1.3 var(--sans);letter-spacing:.12em;color:var(--amber-deep)}
-.root-body h3{margin:12px 0 12px;font-size:28px}
-.root-body p{font-size:20px;line-height:1.8;color:var(--on-paper-mute)}
+.topics{list-style:none;margin:0;padding:0}
+.topic{display:grid;grid-template-columns:200px minmax(0,1fr) minmax(260px,340px);grid-template-areas:"img head links" "img body links";grid-template-rows:auto 1fr;gap:6px clamp(24px,3vw,44px);padding:30px 0;border-bottom:1px solid var(--paper-line)}
+.topic img{grid-area:img;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r)}
+.topic-head{grid-area:head}.topic-body{grid-area:body}
+.topic .k{font:500 20px/1.3 var(--sans);letter-spacing:.12em;color:var(--amber-deep)}
+.topic h3{margin:8px 0 0;font-size:clamp(24px,2.2vw,28px)}
+.topic-body p{font-size:20px;line-height:1.8;color:var(--on-paper-mute)}
+.topic .links{grid-area:links;margin-top:0;border-bottom:1px solid #e6dbc2;align-self:start}
+.nums{margin-top:8px}
+.nums summary{display:inline-flex;align-items:center;gap:6px;min-height:44px;font-size:20px;color:var(--amber-deep);cursor:pointer;list-style:none}
+.nums summary::-webkit-details-marker{display:none}
+.nums summary::before{content:"＋"}.nums[open] summary::before{content:"－"}
+.nums summary:hover{text-decoration:underline;text-underline-offset:4px}
 .facts{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:8px}
 .facts li{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:baseline;font-size:20px;color:var(--on-paper-mute);border-top:1px solid #e6dbc2;padding-top:8px}
 .facts b{font:900 26px/1 var(--serif);color:var(--on-paper);font-variant-numeric:tabular-nums}
@@ -234,27 +259,22 @@ section{position:relative}
 .links a span{color:var(--amber-deep);transition:transform .2s var(--ease)}
 .links a:hover{color:var(--amber-deep)}.links a:hover span{transform:translate(2px,-2px)}
 .eco-note{margin-top:40px;font-size:20px;color:var(--on-paper-mute);max-width:52em}
-@media (max-width:1040px){.root{--drop:36px!important}.eco-head{grid-template-columns:1fr}}
-@media (max-width:600px){.eco-grid{grid-template-columns:1fr}}
+@media (max-width:1040px){
+  .eco-head{grid-template-columns:1fr}
+  .topic{grid-template-columns:160px minmax(0,1fr);grid-template-areas:"img head" "img body" "img links";grid-template-rows:auto auto 1fr}
+  .topic .links{margin-top:10px}
+}
+@media (max-width:640px){
+  .topic{grid-template-columns:88px minmax(0,1fr);grid-template-areas:"img head" "body body" "links links";grid-template-rows:auto;gap:14px 16px;padding:26px 0}
+  .topic img{aspect-ratio:1;align-self:center}
+  .topic .k{letter-spacing:.06em}
+  .topic .links{margin-top:0}
+}
 
-/* 100 LEAVES */
-.hundred .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(40px,6vw,90px);align-items:center}
-.hundred h2 .num{color:var(--amber-hi)}
+/* 步驟清單（百集節目、前置作業共用） */
 .steps{list-style:none;padding:0;margin:34px 0 0;counter-reset:s}
 .steps li{counter-increment:s;display:grid;grid-template-columns:52px 1fr;gap:10px;padding:14px 0;border-top:1px solid var(--line-ink);font-size:20px;color:#cfd3c4}
 .steps li::before{content:"0" counter(s);font:600 20px/1.9 var(--sans);color:var(--amber);letter-spacing:.1em}
-.leaves{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
-.leaf span{pointer-events:none}
-@media (max-width:1180px) and (min-width:901px),(max-width:640px){.leaf span{display:none}.leaf.on::after{content:"";width:28%;height:28%;border-radius:50%;background:#1a1206}}
-.leaf{aspect-ratio:1;border:1px solid var(--line-ink);border-radius:50% 0 50% 0;display:grid;place-items:center;font:500 20px/1 var(--sans);color:rgba(239,230,210,.28);font-variant-numeric:tabular-nums;transition:border-color .2s,background .2s}
-.leaf.on{background:var(--amber);border-color:var(--amber);color:#1a1206;font-weight:700}
-a.leaf{text-decoration:none}
-a.leaf.on:hover{background:var(--amber-hi)}
-.leaf:not(.on):hover{border-color:var(--amber)}
-.legend{display:flex;gap:22px;margin-top:18px;font-size:20px;color:var(--on-ink-mute);flex-wrap:wrap}
-.legend i{display:inline-block;width:18px;height:18px;border-radius:50% 0 50% 0;margin-right:8px;vertical-align:-1px;border:1px solid var(--line-ink)}
-.legend i.on{background:var(--amber);border-color:var(--amber)}
-@media (max-width:900px){.hundred .wrap{grid-template-columns:1fr}}
 
 /* SEATS 嘉賓席（2026-10-14） */
 .seats{background:var(--ink-2)}
@@ -276,7 +296,7 @@ a.leaf.on:hover{background:var(--amber-hi)}
 .pledges .what{margin:10px 0 8px}
 .pledges .meta{font-size:20px;color:var(--amber)}
 .pledges li.empty{border-style:dashed;color:var(--on-ink-mute)}
-.seat-join{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(40px,6vw,90px);margin-top:72px;padding-top:56px;border-top:1px solid var(--line-ink)}
+.seat-join{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(40px,6vw,90px);margin-top:72px;padding-top:56px;border-top:1px solid var(--line-ink);scroll-margin-top:72px}
 .seat-join h3{font-size:clamp(26px,3vw,36px);font-weight:900;margin:12px 0 16px}
 .seat-join .fine{font-size:20px;color:var(--on-ink-mute);margin-top:18px}
 .seat-join .fine a{color:var(--amber-hi)}
@@ -382,9 +402,8 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
         <li><a href="#name">命名</a></li>
         <li><a href="#people">主持人</a></li>
         <li><a href="#philo">理念</a></li>
-        <li><a href="#episodes">節目</a></li>
+        <li><a href="#episodes">百集節目</a></li>
         <li><a href="#eco">版圖</a></li>
-        <li><a href="#hundred">百集計畫</a></li>
         <li><a href="#seats">嘉賓席</a></li>
         <li><a href="#prep">前置作業</a></li>
       </ul>
@@ -514,41 +533,41 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
   </div>
 </section>
 
-<!-- EPISODES -->
+<!-- EPISODES ＋ 100 集（2026-10-15 合併原「節目單」與「100 集，100 位領跑人」）
+     格子由下方 script 依每集資料畫出；舊網址 #hundred 仍會跳到格子這裡 -->
 <section class="sec eps" id="episodes" aria-labelledby="eps-h">
   <div class="wrap">
-    <aside class="eps-side rv">
+    <div class="eps-head rv">
       <img src="img/cover.jpg" alt="榮樹下 Podcast 封面：木質招牌寫著「榮樹下——邱裕榮與吳大樹談古論今聊家常」，前景是一支錄音麥克風" width="600" height="600" loading="lazy">
-      <h2 id="eps-h">節目單</h2>
-      <p class="lead">每一集，請一位企業家或發明家坐下來，說他為什麼做這件事。</p>
-      <a class="btn btn-ghost" href="https://player.soundon.fm/p/01bac58b-741f-4cbc-8fa6-58dd45f24923" target="_blank" rel="noopener">在 SoundOn Podcast 收聽全部 <span class="arr" aria-hidden="true">↗</span></a>
-    </aside>
-    <ol class="track">
-      <li class="rv"><a href="https://player.soundon.fm/p/01bac58b-741f-4cbc-8fa6-58dd45f24923/episodes/58db728e-0556-41a8-821a-874b6a2bedca" target="_blank" rel="noopener">
-        <span class="no">01<small>EP</small></span>
-        <span><h3>專訪順發電腦董事長 吳錦昌</h3><p>一份單純的初心，一場長達 17 年的公益之路，一場超過 12,000 人的路跑，一場超過 100 家參與的公益活動。</p><span class="tag">重點節錄版</span></span>
-        <span class="dur">12:15<small>2026.10.09</small><span class="play" aria-hidden="true">▶</span></span></a></li>
-      <li class="rv"><a href="https://player.soundon.fm/p/01bac58b-741f-4cbc-8fa6-58dd45f24923/episodes/d939b0f7-f80d-4923-93f5-30d28db87d94" target="_blank" rel="noopener">
-        <span class="no">01<small>LIVE</small></span>
-        <span><h3>吳錦昌董事長 ‧ 完整對談</h3><p>不剪輯的一小時十四分鐘。想聽完整的來龍去脈，從這一版開始。</p><span class="tag">實況轉播版</span></span>
-        <span class="dur">1:14:42<small>2026.10.09</small><span class="play" aria-hidden="true">▶</span></span></a></li>
-      <li class="rv"><a href="https://player.soundon.fm/p/01bac58b-741f-4cbc-8fa6-58dd45f24923/episodes/5247b010-60c2-4e8c-9459-173fa6b6d1b9" target="_blank" rel="noopener">
-        <span class="no">02<small>EP</small></span>
-        <span><h3>專訪 楊境界博士</h3><p>專注氫同位素與細胞能量代謝研究。與漢諾威研發團隊把石墨烯篩分技術，轉化為可量產的常溫降氘製程，並在高雄旗山建立示範基地。</p><span class="tag">重點節錄版</span></span>
-        <span class="dur">17:48<small>2026.10.09</small><span class="play" aria-hidden="true">▶</span></span></a></li>
-      <li class="rv"><a href="https://player.soundon.fm/p/01bac58b-741f-4cbc-8fa6-58dd45f24923/episodes/16f7315c-a855-4a03-9b61-de7fa3d4e18a" target="_blank" rel="noopener">
-        <span class="no">03<small>EP</small></span>
-        <span><h3>專訪約瑟布發明人 周總</h3><p>讓一面牆，長出一座永續的生意。從一塊會呼吸的布，到城市裡持續生長的風景。</p><span class="tag">重點節錄版</span></span>
-        <span class="dur">21:14<small>2026.10.11</small><span class="play" aria-hidden="true">▶</span></span></a></li>
-      <li class="rv"><a href="https://player.soundon.fm/p/01bac58b-741f-4cbc-8fa6-58dd45f24923/episodes/102b66d2-afc7-4dd6-bc24-8462acfb3f4c" target="_blank" rel="noopener">
-        <span class="no">04<small>EP</small></span>
-        <span><h3>專訪瘋子發明人 黃國彰</h3><p>別人說風太小、浪太亂、水庫太髒。他說：那些都是還沒接上的電。十多年來，他把風、河水、海浪、洋流，甚至工廠排出去的廢風，一項一項畫成專利。</p><span class="tag">重點節錄版</span><span class="tag tag-new">最新一集</span></span>
-        <span class="dur">19:16<small>2026.10.12</small><span class="play" aria-hidden="true">▶</span></span></a></li>
+      <div>
+        <p class="eyebrow">榮樹下 Podcast × Run for Future</p>
+        <h2 id="eps-h"><span class="num">100</span> 集，<br><span class="num">100</span> 位領跑人。</h2>
+      </div>
+      <div>
+        <p class="lead">每一集，請一位企業家或發明家坐下來，說他為什麼做這件事。我們將逐一專訪 Run for Future 的 100 家共同發起單位，由企業最高領導者親口說出：你的企業，為什麼而跑。每一片葉子，都是一個被記錄的名字。</p>
+        <a class="btn btn-ghost" href="https://player.soundon.fm/p/01bac58b-741f-4cbc-8fa6-58dd45f24923" target="_blank" rel="noopener">在 SoundOn Podcast 收聽全部 <span class="arr" aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+    <p class="legend" id="hundred"><span><i class="on" aria-hidden="true"></i>已播出 <b id="ep-count">4</b> 集：點一下看內容、收聽</span><span><i aria-hidden="true"></i>等你：點一下報名嘉賓席</span></p>
+    <ol class="grid100" id="ep-grid" aria-label="100 集進度，已播出 4 集"></ol>
+    <ol class="steps">
+      <li>加入成為共同發起人，確認領跑代表</li>
+      <li>坐到榮樹下，分享品牌故事與公益理念</li>
+      <li>節目上架，透過 Podcast 與社群持續擴散</li>
+      <li>帶動更多人報名——2027.04.18 港都見</li>
     </ol>
   </div>
+  <dialog class="ep-dlg" id="ep-dlg" aria-labelledby="ep-dlg-h">
+    <div class="dlg-in">
+      <button class="dlg-x" type="button" aria-label="關閉">×</button>
+      <div id="ep-dlg-body"></div>
+    </div>
+  </dialog>
 </section>
 
-<!-- ECOSYSTEM -->
+<!-- ECOSYSTEM 主題清單（2026-10-15 改版：一個主題一行）
+     以後加主題：複製一整段 <li class="topic rv">…</li> 貼在最後，改圖、ROOT 編號、標題、說明、連結即可；
+     「看關鍵數字」那段沒有數字就整段刪掉。小圖放 img/，建議 480×360。 -->
 <section class="paper sec" id="eco" aria-labelledby="eco-h">
   <div class="wrap">
     <div class="eco-head rv">
@@ -556,80 +575,59 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
       <p class="lead">榕樹的氣根落地，就成了新的樹幹。每一場專訪背後，都長出一條可以參與的計畫——媒體、綠能、生命農業與公益路跑，彼此相連。</p>
     </div>
     <div class="canopy" aria-hidden="true"></div>
-    <div class="eco-grid">
-      <article class="root rv"><div class="root-card">
-        <img src="img/mic.jpg" alt="" width="1800" height="1350" loading="lazy" style="object-position:70% 60%">
-        <div class="root-body">
-          <span class="k">ROOT 01 ‧ 媒體與導師</span>
-          <h3>榮樹下 IP ‧ 商業導師席</h3>
+    <ol class="topics">
+      <li class="topic rv">
+        <img src="img/thumb-mic.jpg" alt="" width="480" height="360" loading="lazy" style="object-position:70% 60%">
+        <div class="topic-head"><span class="k">ROOT 01 ‧ 媒體與導師</span><h3>榮樹下 IP ‧ 商業導師席</h3></div>
+        <div class="topic-body">
           <p>深度專訪把企業家精神轉成數位信任資產；再由導師群與團隊夥伴，接住每一位想再往前一步的人。</p>
-          <ul class="facts"><li><b>3,600</b>6 年走進同一個房間的潛在客戶</li><li><b>116</b>位玩家已在信任遊戲入座</li></ul>
-          <nav class="links" aria-label="媒體與導師相關頁面">
-            <a href="https://mentor100.bymyway.com/" target="_blank" rel="noopener">AI 百人導師計劃<span aria-hidden="true">↗</span></a>
-            <a href="https://event.bymyway.com/curated/three-lacks" target="_blank" rel="noopener">團隊計畫：客戶、人才、伯樂<span aria-hidden="true">↗</span></a>
-            <a href="https://trust.bymyway.com/game/" target="_blank" rel="noopener">信任遊戲<span aria-hidden="true">↗</span></a>
-          </nav>
-        </div></div></article>
-      <article class="root rv"><div class="root-card">
-        <img src="img/wind.jpg" alt="" width="1800" height="1350" loading="lazy">
-        <div class="root-body">
-          <span class="k">ROOT 02 ‧ 綠能科技</span>
-          <h3>讓電長在需要的地方</h3>
+          <details class="nums"><summary>看關鍵數字</summary><ul class="facts"><li><b>3,600</b>6 年走進同一個房間的潛在客戶</li><li><b>116</b>位玩家已在信任遊戲入座</li></ul></details>
+        </div>
+        <nav class="links" aria-label="媒體與導師相關頁面">
+          <a href="https://mentor100.bymyway.com/" target="_blank" rel="noopener">AI 百人導師計劃<span aria-hidden="true">↗</span></a>
+          <a href="https://event.bymyway.com/curated/three-lacks" target="_blank" rel="noopener">團隊計畫：客戶、人才、伯樂<span aria-hidden="true">↗</span></a>
+          <a href="https://trust.bymyway.com/game/" target="_blank" rel="noopener">信任遊戲<span aria-hidden="true">↗</span></a>
+        </nav>
+      </li>
+      <li class="topic rv">
+        <img src="img/thumb-wind.jpg" alt="" width="480" height="360" loading="lazy">
+        <div class="topic-head"><span class="k">ROOT 02 ‧ 綠能科技</span><h3>讓電長在需要的地方</h3></div>
+        <div class="topic-body">
           <p>台南歸仁的發明人黃國彰，把風、河水、海浪、洋流，甚至工廠排出的廢風，一項一項畫成專利——小型、分散、在地。</p>
-          <ul class="facts"><li><b>167</b>項專利登記資料（TIPO GPSS）</li><li><b>7</b>個國家／地區布局</li><li><b>43</b>個技術家族</li></ul>
-          <nav class="links" aria-label="綠能相關頁面">
-            <a href="https://event.bymyway.com/curated/inventor/" target="_blank" rel="noopener">發明家黃國彰專題<span aria-hidden="true">↗</span></a>
-            <a href="https://player.soundon.fm/p/01bac58b-741f-4cbc-8fa6-58dd45f24923/episodes/102b66d2-afc7-4dd6-bc24-8462acfb3f4c" target="_blank" rel="noopener">收聽 EP.04 專訪<span aria-hidden="true">↗</span></a>
-          </nav>
-        </div></div></article>
-      <article class="root rv"><div class="root-card">
-        <img src="img/wall.jpg" alt="" width="1800" height="1350" loading="lazy">
-        <div class="root-body">
-          <span class="k">ROOT 03 ‧ 生命農業與水</span>
-          <h3>讓土地重新值錢</h3>
+          <details class="nums"><summary>看關鍵數字</summary><ul class="facts"><li><b>167</b>項專利登記資料（TIPO GPSS）</li><li><b>7</b>個國家／地區布局</li><li><b>43</b>個技術家族</li></ul></details>
+        </div>
+        <nav class="links" aria-label="綠能相關頁面">
+          <a href="https://event.bymyway.com/curated/inventor/" target="_blank" rel="noopener">發明家黃國彰專題<span aria-hidden="true">↗</span></a>
+          <a href="https://player.soundon.fm/p/01bac58b-741f-4cbc-8fa6-58dd45f24923/episodes/102b66d2-afc7-4dd6-bc24-8462acfb3f4c" target="_blank" rel="noopener">收聽 EP.04 專訪<span aria-hidden="true">↗</span></a>
+        </nav>
+      </li>
+      <li class="topic rv">
+        <img src="img/thumb-wall.jpg" alt="" width="480" height="360" loading="lazy">
+        <div class="topic-head"><span class="k">ROOT 03 ‧ 生命農業與水</span><h3>讓土地重新值錢</h3></div>
+        <div class="topic-body">
           <p>一塊會呼吸的布、一罐發酵母液、一滴從空氣取來的水。把被叫做夕陽的農業，變成能驗證、能傳承的生命科技資產。</p>
-          <ul class="facts"><li><b>300+</b>項 SGS 農藥殘留檢測全數零檢出</li><li><b>+10%</b>綠建築容積獎勵的應用路徑</li><li><b>3 合 1</b>綠牆 × 屏幕 × 富氫水機，只租不賣</li></ul>
-          <nav class="links" aria-label="生命農業相關頁面">
-            <a href="https://event.bymyway.com/curated/joseph-cloth/" target="_blank" rel="noopener">約瑟布 ‧ 永續綠牆<span aria-hidden="true">↗</span></a>
-            <a href="https://event.bymyway.com/curated/big-plan/" target="_blank" rel="noopener">生命農業億級計劃<span aria-hidden="true">↗</span></a>
-            <a href="https://event.bymyway.com/curated/hnv-cc/" target="_blank" rel="noopener">楊博士 ‧ 空氣取水<span aria-hidden="true">↗</span></a>
-            <a href="https://event.bymyway.com/curated/qiu-yurong/" target="_blank" rel="noopener">白皮書：當 AI 遇上農業<span aria-hidden="true">↗</span></a>
-          </nav>
-        </div></div></article>
-      <article class="root rv"><div class="root-card">
-        <img src="img/run.jpg" alt="" width="1800" height="1350" loading="lazy">
-        <div class="root-body">
-          <span class="k">ROOT 04 ‧ 公益路跑</span>
-          <h3>Run for Future 2027</h3>
+          <details class="nums"><summary>看關鍵數字</summary><ul class="facts"><li><b>300+</b>項 SGS 農藥殘留檢測全數零檢出</li><li><b>+10%</b>綠建築容積獎勵的應用路徑</li><li><b>3 合 1</b>綠牆 × 屏幕 × 富氫水機，只租不賣</li></ul></details>
+        </div>
+        <nav class="links" aria-label="生命農業相關頁面">
+          <a href="https://event.bymyway.com/curated/joseph-cloth/" target="_blank" rel="noopener">約瑟布 ‧ 永續綠牆<span aria-hidden="true">↗</span></a>
+          <a href="https://event.bymyway.com/curated/big-plan/" target="_blank" rel="noopener">生命農業億級計劃<span aria-hidden="true">↗</span></a>
+          <a href="https://event.bymyway.com/curated/hnv-cc/" target="_blank" rel="noopener">楊博士 ‧ 空氣取水<span aria-hidden="true">↗</span></a>
+          <a href="https://event.bymyway.com/curated/qiu-yurong/" target="_blank" rel="noopener">白皮書：當 AI 遇上農業<span aria-hidden="true">↗</span></a>
+        </nav>
+      </li>
+      <li class="topic rv">
+        <img src="img/thumb-run.jpg" alt="" width="480" height="360" loading="lazy">
+        <div class="topic-head"><span class="k">ROOT 04 ‧ 公益路跑</span><h3>Run for Future 2027</h3></div>
+        <div class="topic-body">
           <p>第五屆順發 × 港都公益路跑。聯合公益、運動幸福——不是各自做好事，而是一起把好事做大。</p>
-          <ul class="facts"><li><b>04.18</b>2027 高雄港灣（駁二 × 高流）</li><li><b>12,000</b>位跑者，25–30 個國家地區</li><li><b>100</b>家共同發起企業</li></ul>
-          <nav class="links" aria-label="公益路跑相關頁面">
-            <a href="https://event.bymyway.com/curated/runforfuture/" target="_blank" rel="noopener">成為 100 家之一<span aria-hidden="true">↗</span></a>
-          </nav>
-        </div></div></article>
-    </div>
+          <details class="nums"><summary>看關鍵數字</summary><ul class="facts"><li><b>04.18</b>2027 高雄港灣（駁二 × 高流）</li><li><b>12,000</b>位跑者，25–30 個國家地區</li><li><b>100</b>家共同發起企業</li></ul></details>
+        </div>
+        <nav class="links" aria-label="公益路跑相關頁面">
+          <a href="https://event.bymyway.com/curated/runforfuture/" target="_blank" rel="noopener">成為 100 家之一<span aria-hidden="true">↗</span></a>
+        </nav>
+      </li>
+    </ol>
     <p class="eco-note">各項數據引自上列專題頁所載之公開資料或計畫書內容；計畫中的目標與規劃，不等同已完成之實績。</p>
-  </div>
-</section>
-
-<!-- 100 -->
-<section class="sec hundred" id="hundred" aria-labelledby="h100">
-  <div class="wrap">
-    <div class="rv">
-      <p class="eyebrow">榮樹下 Podcast × Run for Future</p>
-      <h2 id="h100"><span class="num">100</span> 集，<br><span class="num">100</span> 位領跑人。</h2>
-      <p class="lead" style="margin-top:22px">我們將逐一專訪 Run for Future 的 100 家共同發起單位，由企業最高領導者親口說出：你的企業，為什麼而跑。每一片葉子，都是一個被記錄的名字。</p>
-      <ol class="steps">
-        <li>加入成為共同發起人，確認領跑代表</li>
-        <li>坐到榮樹下，分享品牌故事與公益理念</li>
-        <li>節目上架，透過 Podcast 與社群持續擴散</li>
-        <li>帶動更多人報名——2027.04.18 港都見</li>
-      </ol>
-    </div>
-    <div class="rv">
-      <div class="leaves" id="leaves" role="list" aria-label="100 集進度，已播出 4 集"></div>
-      <div class="legend"><span><i class="on"></i>已播出</span><span><i></i>等你入座</span></div>
-    </div>
   </div>
 </section>
 
@@ -656,7 +654,7 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
         <li class="empty">第一片葉子，等你來掛。</li>
       </ul>
     </div>
-    <div class="seat-join">
+    <div class="seat-join" id="seat-join">
       <div class="rv">
         <p class="eyebrow">下一場的座位</p>
         <h3>我也想坐上嘉賓席。</h3>
@@ -783,21 +781,6 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
   const onScroll=()=>nav.classList.toggle('solid',scrollY>40);
   onScroll();addEventListener('scroll',onScroll,{passive:true});
 
-  // 100 leaves
-  const eps={1:'https://player.soundon.fm/p/01bac58b-741f-4cbc-8fa6-58dd45f24923/episodes/58db728e-0556-41a8-821a-874b6a2bedca',
-             2:'https://player.soundon.fm/p/01bac58b-741f-4cbc-8fa6-58dd45f24923/episodes/5247b010-60c2-4e8c-9459-173fa6b6d1b9',
-             3:'https://player.soundon.fm/p/01bac58b-741f-4cbc-8fa6-58dd45f24923/episodes/16f7315c-a855-4a03-9b61-de7fa3d4e18a',
-             4:'https://player.soundon.fm/p/01bac58b-741f-4cbc-8fa6-58dd45f24923/episodes/102b66d2-afc7-4dd6-bc24-8462acfb3f4c'};
-  const names={1:'吳錦昌董事長',2:'楊境界博士',3:'約瑟布 周總',4:'發明家 黃國彰'};
-  const L=document.getElementById('leaves');
-  for(let n=1;n<=100;n++){
-    const id=String(n).padStart(3,'0');
-    let el;
-    if(eps[n]){el=document.createElement('a');el.href=eps[n];el.target='_blank';el.rel='noopener';el.className='leaf on';el.setAttribute('aria-label',`第 ${n} 集：${names[n]}，已播出`);el.title=`EP.${id} ${names[n]}`;}
-    else{el=document.createElement('a');el.href='#join';el.className='leaf';el.setAttribute('aria-label',`第 ${n} 集，等你入座`);el.title=`EP.${id} 等你入座`;}
-    el.setAttribute('role','listitem');const t=document.createElement('span');t.textContent=n;el.appendChild(t);L.appendChild(el);
-  }
-
   // reveal
   const io='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'}):null;
   document.querySelectorAll('.rv').forEach(el=>io?io.observe(el):el.classList.add('in'));
@@ -914,44 +897,91 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
 })();
 </script>
 <script>
-/* 節目單自動更新（2026-10-13 教練：SoundOn 上架新集數，這裡不用手動補）
-   上面靜態名單是底（含人工寫的簡介）；這段開頁時讀 /api/rongtree/episodes（伺服器讀 SoundOn RSS），
-   只把「靜態名單裡還沒有的集數」補進節目單、已播出清單、100 片葉子。讀不到就維持靜態名單，不影響頁面。 */
+/* 百集節目（2026-10-15 改版：原「節目單」＋「100 集」合併成 1～100 格）
+   BASE 是人工整理的底：簡介照原節目單；pages 是來賓在本頁已有的專題網頁（彈窗裡「認識來賓」）。
+   開頁讀 /api/rongtree/episodes（伺服器讀 SoundOn RSS），BASE 裡還沒有的集數自動補上：
+   重點節錄版給下一個集數，實況轉播版併進同一位來賓那一集，也補進上方「已播出」清單。讀不到就只用 BASE，不影響頁面。 */
 (()=>{
-  const track=document.querySelector('#episodes .track'),onair=document.querySelector('.onair');
-  if(!track||!window.fetch)return;
-  const idOf=u=>(u.match(/episodes\/([0-9a-f-]{36})/)||[])[1];
+  const grid=document.getElementById('ep-grid'),dlg=document.getElementById('ep-dlg'),body=document.getElementById('ep-dlg-body');
+  if(!grid||!dlg)return;
+  const SO='https://player.soundon.fm/p/01bac58b-741f-4cbc-8fa6-58dd45f24923/episodes/';
+  const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const pad=n=>String(n).padStart(2,'0');
+  // no 第幾集、who 格子上的短名、guest 彈窗標題、pages [連結字, 網址]、v 各版本（live=實況轉播版）
+  const BASE=[
+    {no:1,who:'吳錦昌',guest:'順發電腦 吳錦昌董事長',pages:[],v:[
+      {id:'58db728e-0556-41a8-821a-874b6a2bedca',live:false,title:'專訪順發電腦董事長 吳錦昌',dur:'12:15',date:'2026.10.09',
+       desc:'一份單純的初心，一場長達 17 年的公益之路，一場超過 12,000 人的路跑，一場超過 100 家參與的公益活動。'},
+      {id:'d939b0f7-f80d-4923-93f5-30d28db87d94',live:true,title:'吳錦昌董事長 ‧ 完整對談',dur:'1:14:42',date:'2026.10.09',
+       desc:'不剪輯的一小時十四分鐘。想聽完整的來龍去脈，從這一版開始。'}]},
+    {no:2,who:'楊境界',guest:'楊境界博士',pages:[['楊博士 ‧ 空氣取水','https://event.bymyway.com/curated/hnv-cc/']],v:[
+      {id:'5247b010-60c2-4e8c-9459-173fa6b6d1b9',live:false,title:'專訪 楊境界博士',dur:'17:48',date:'2026.10.09',
+       desc:'專注氫同位素與細胞能量代謝研究。與漢諾威研發團隊把石墨烯篩分技術，轉化為可量產的常溫降氘製程，並在高雄旗山建立示範基地。'}]},
+    {no:3,who:'周總',guest:'約瑟布 周總',pages:[['約瑟布 ‧ 永續綠牆','https://event.bymyway.com/curated/joseph-cloth/']],v:[
+      {id:'16f7315c-a855-4a03-9b61-de7fa3d4e18a',live:false,title:'專訪約瑟布發明人 周總',dur:'21:14',date:'2026.10.11',
+       desc:'讓一面牆，長出一座永續的生意。從一塊會呼吸的布，到城市裡持續生長的風景。'}]},
+    {no:4,who:'黃國彰',guest:'發明家 黃國彰',pages:[['發明家黃國彰專題','https://event.bymyway.com/curated/inventor/']],v:[
+      {id:'102b66d2-afc7-4dd6-bc24-8462acfb3f4c',live:false,title:'專訪瘋子發明人 黃國彰',dur:'19:16',date:'2026.10.12',
+       desc:'別人說風太小、浪太亂、水庫太髒。他說：那些都是還沒接上的電。十多年來，他把風、河水、海浪、洋流，甚至工廠排出去的廢風，一項一項畫成專利。'}]}
+  ];
+  const eps=BASE.map(e=>({...e,v:e.v.map(x=>({...x,url:SO+x.id}))}));
+
+  function render(){
+    const byNo=new Map(eps.map(e=>[e.no,e]));
+    let h='',c=0;
+    for(let n=1;n<=100;n++){
+      const e=byNo.get(n);
+      if(e)c++;
+      h+=e?`<li><button class="cell on" type="button" data-no="${n}" aria-haspopup="dialog" aria-label="第 ${n} 集：${esc(e.guest)}，已播出，點開看內容"><span class="n">${n}</span><span class="w">${esc(e.who)}</span></button></li>`
+          :`<li><a class="cell" href="#seat-join" aria-label="第 ${n} 集，等你：到嘉賓席報名"><span class="n">${n}</span><span class="w">等你</span></a></li>`;
+    }
+    grid.innerHTML=h;
+    grid.setAttribute('aria-label',`100 集進度，已播出 ${c} 集`);
+    const ct=document.getElementById('ep-count');if(ct)ct.textContent=c;
+  }
+
+  function open(no){
+    const e=eps.find(x=>x.no===no);if(!e)return;
+    const vers=[...e.v].sort((a,b)=>a.live-b.live);
+    if(typeof dlg.showModal!=='function'){window.open(vers[0].url,'_blank','noopener');return}
+    const latest=Math.max(...eps.map(x=>x.no));
+    body.innerHTML=`<p class="eyebrow">第 ${pad(no)} 集 ‧ 已播出${no===latest?' ‧ 最新一集':''}</p><h3 id="ep-dlg-h">${esc(e.guest)}</h3>`+
+      vers.map(x=>`<article class="ver"><span class="tag">${x.live?'實況轉播版':'重點節錄版'}</span><h4>${esc(x.title)}</h4>`+
+        `<p class="meta">${esc(x.date)}${x.dur?`　‧　長度 ${esc(x.dur)}`:''}</p>${x.desc?`<p>${esc(x.desc)}</p>`:''}`+
+        `<a class="btn btn-amber" href="${esc(x.url)}" target="_blank" rel="noopener">到 SoundOn 收聽 <span class="arr" aria-hidden="true">↗</span></a></article>`).join('')+
+      (e.pages.length?`<div class="more"><p class="eyebrow">認識來賓</p>${e.pages.map(([t,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}<span aria-hidden="true">↗</span></a>`).join('')}</div>`:'');
+    dlg.showModal();dlg.scrollTop=0;
+  }
+  grid.addEventListener('click',ev=>{const b=ev.target.closest('button.cell');if(b)open(+b.dataset.no)});
+  dlg.querySelector('.dlg-x').addEventListener('click',()=>dlg.close());
+  dlg.addEventListener('click',ev=>{if(ev.target===dlg)dlg.close()});
+  render();
+
+  if(!window.fetch)return;
   const share3=(a,b)=>{a=a.replace(/[\s專訪‧\-]/g,'');b=b.replace(/[\s專訪‧\-]/g,'');for(let i=0;i+3<=a.length;i++)if(b.includes(a.substr(i,3)))return true;return false;};
   fetch('/api/rongtree/episodes').then(r=>r.json()).then(d=>{
-    const have=new Set([...track.querySelectorAll('a[href*="/episodes/"]')].map(a=>idOf(a.href)));
-    const fresh=(d.episodes||[]).filter(e=>e.id&&!have.has(e.id));
+    const have=new Set(eps.flatMap(e=>e.v.map(x=>x.id)));
+    const fresh=(d.episodes||[]).filter(e=>e&&e.id&&e.title&&!have.has(e.id)&&/^https:\/\//.test(e.url||''))
+      .sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));
     if(!fresh.length)return;
-    const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-    const items=[...track.querySelectorAll('li')].map(li=>({no:+li.querySelector('.no').firstChild.textContent,name:li.querySelector('h3').textContent}));
-    let maxNo=Math.max(0,...items.map(i=>i.no)),newest=null;
-    fresh.forEach(e=>{
-      let no,kind;
-      if(e.version==='live'){const m=items.concat(newest?[newest]:[]).reverse().find(i=>share3(i.name,e.title));no=m?m.no:++maxNo;kind='LIVE';}
-      else{no=++maxNo;kind='EP';}
-      const nn=String(no).padStart(2,'0'),tag=kind==='LIVE'?'實況轉播版':'重點節錄版';
-      const li=document.createElement('li');li.className='rv in';
-      li.innerHTML=`<a href="${esc(e.url)}" target="_blank" rel="noopener"><span class="no">${nn}<small>${kind}</small></span><span><h3>${esc(e.title.startsWith('專訪')?e.title:'專訪 '+e.title)}</h3><p>${esc(e.desc)}</p><span class="tag">${tag}</span></span><span class="dur">${esc(e.dur)}<small>${esc(e.date)}</small><span class="play" aria-hidden="true">▶</span></span></a>`;
-      track.appendChild(li);items.push({no,name:e.title});
-      if(kind==='EP'){newest={no,name:e.title,url:e.url};
-        const short=e.title.replace(/^專訪/,'').replace(/-/g,' ').trim();
-        if(onair){onair.querySelectorAll('.new').forEach(n=>n.remove());
-          const o=document.createElement('li');o.innerHTML=`<a href="${esc(e.url)}" target="_blank" rel="noopener"><b>EP.${nn}</b><span>${esc(short)}<span class="new">NEW</span></span><i aria-hidden="true">▶</i></a>`;onair.insertBefore(o,onair.firstChild);}
-        const leaf=[...document.querySelectorAll('#leaves .leaf')].find(l=>l.textContent.trim()===String(no));
-        if(leaf){leaf.className='leaf on';leaf.href=e.url;leaf.target='_blank';leaf.rel='noopener';leaf.title=`EP.${String(no).padStart(3,'0')} ${short}`;leaf.setAttribute('aria-label',`第 ${no} 集：${short}，已播出`);}
-      }
+    const ver=e=>({id:e.id,url:e.url,live:e.version==='live',title:e.title,desc:e.desc||'',dur:e.dur||'',date:e.date||''});
+    const add=e=>{const full=e.title.replace(/^專訪/,'').replace(/-/g,' ').trim();
+      const ep={no:Math.max(0,...eps.map(x=>x.no))+1,who:full.split(/\s+/).pop(),guest:full,pages:[],v:[ver(e)]};eps.push(ep);return ep;};
+    const added=fresh.filter(e=>e.version!=='live').map(add);
+    fresh.filter(e=>e.version==='live').forEach(e=>{
+      const rev=[...eps].reverse();
+      const m=rev.find(x=>x.who&&e.title.includes(x.who))||rev.find(x=>x.v.some(y=>!y.live&&share3(y.title,e.title)));
+      if(m)m.v.push(ver(e));else add(e);
     });
-    if(newest){
-      track.querySelectorAll('.tag-new').forEach(t=>t.remove());
-      const last=[...track.querySelectorAll('li')].reverse().find(li=>li.querySelector('.no small').textContent==='EP');
-      if(last){const t=document.createElement('span');t.className='tag tag-new';t.textContent='最新一集';last.querySelector('.tag').after(t);}
-      const lab=document.querySelector('.intro .label');if(lab)lab.textContent=`已播出 ‧ ${maxNo} 集`;
-      const lv=document.getElementById('leaves');if(lv)lv.setAttribute('aria-label',`100 集進度，已播出 ${maxNo} 集`);
+    render();
+    const onair=document.querySelector('.onair');
+    if(onair&&added.length){
+      onair.querySelectorAll('.new').forEach(n=>n.remove());
+      added.forEach((ep,i)=>{const o=document.createElement('li');
+        o.innerHTML=`<a href="${esc(ep.v[0].url)}" target="_blank" rel="noopener"><b>EP.${pad(ep.no)}</b><span>${esc(ep.guest)}${i===added.length-1?'<span class="new">NEW</span>':''}</span><i aria-hidden="true">▶</i></a>`;
+        onair.insertBefore(o,onair.firstChild);});
     }
+    const lab=document.querySelector('.intro .label');if(lab)lab.textContent=`已播出 ‧ ${eps.length} 集`;
   }).catch(()=>{});
 })();
 </script>
