@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>大樹軍火庫｜你要的資源，這裡找得到（設計稿）</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="大樹軍火庫總入口（設計稿，資料皆為示範）：需要的人找得到資源，有本事的人被看見。">
+<meta name="theme-color" content="#0e1712">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* 視覺語言沿用榮樹下 index.html：墨綠底、米紙、琥珀金強調、宋體大標、葉形圓角。全頁字級最小 20px。 */
+:root{
+  --ink:#0e1712; --ink-2:#14211a; --ink-3:#1c2d23;
+  --paper:#f2ead8; --paper-2:#e8dcc3; --paper-line:#cdbd9c; --card:#fffaf0;
+  --on-ink:#efe6d2; --on-ink-mute:#a7b2a3; --on-paper:#1d2a22; --on-paper-mute:#5b6656;
+  --amber:#d9a441; --amber-hi:#f0c46a; --amber-deep:#9a6a1c;
+  --line-ink:rgba(239,230,210,.14);
+  --serif:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --wrap:1200px; --r:6px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ink);color:var(--on-ink);font:400 20px/1.8 var(--sans);letter-spacing:.02em;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+a{color:inherit}
+[hidden]{display:none!important}
+[id]{scroll-margin-top:88px}
+:focus-visible{outline:2px solid var(--amber-hi);outline-offset:3px;border-radius:2px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 clamp(20px,4vw,48px)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:-999px;top:8px;z-index:99;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;background:var(--amber);color:var(--ink);border-radius:4px;font-size:20px}
+.skip:focus{left:8px}
+.eyebrow{margin:0;font:500 20px/1.4 var(--sans);letter-spacing:.2em;color:var(--amber)}
+.paper .eyebrow{color:var(--amber-deep)}
+h1,h2,h3{font-family:var(--serif);font-weight:900;margin:0;letter-spacing:.02em}
+h2{font-size:clamp(34px,5vw,64px);line-height:1.22}
+h1 em,h2 em{font-style:normal;color:var(--amber-hi)}
+.paper h2 em{color:var(--amber-deep)}
+h2 .num{color:var(--amber-hi);font-variant-numeric:tabular-nums}
+h3{font-size:clamp(22px,2vw,26px);line-height:1.4;font-weight:700}
+p{margin:0}
+.lead{font-size:clamp(20px,1.6vw,22px);color:var(--on-ink-mute);max-width:36em}
+.paper{background:var(--paper);color:var(--on-paper);
+  background-image:radial-gradient(rgba(120,90,40,.06) 1px,transparent 1.2px);background-size:5px 5px}
+.paper .lead{color:var(--on-paper-mute)}
+.sec{padding:clamp(72px,10vw,140px) 0}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px clamp(32px,5vw,80px);align-items:end;margin-bottom:clamp(36px,4vw,56px)}
+.sec-head h2{margin-top:14px}
+.sec-cta{display:flex;justify-content:center;margin-top:clamp(36px,5vw,56px)}
+@media (max-width:900px){.sec-head{grid-template-columns:1fr}}
+
+/* 按鈕（同榮樹下） */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6em;min-height:56px;padding:0 28px;border-radius:999px;font:500 20px/1.3 var(--sans);letter-spacing:.08em;text-decoration:none;text-align:center;cursor:pointer;border:1px solid transparent;transition:background .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease),transform .2s var(--ease)}
+.btn-amber{background:var(--amber);color:#1a1206;box-shadow:0 10px 30px -12px rgba(217,164,65,.7)}
+.btn-amber:hover{background:var(--amber-hi);transform:translateY(-1px)}
+.btn-ghost{background:transparent;border-color:rgba(239,230,210,.4);color:var(--on-ink)}
+.btn-ghost:hover{border-color:var(--amber);color:var(--amber-hi)}
+.btn-line{background:transparent;border-color:var(--on-paper);color:var(--on-paper)}
+.btn-line:hover{border-color:var(--amber-deep);color:var(--amber-deep)}
+.btn-xl{min-height:68px;padding:0 38px;font-size:22px}
+.btn-block{width:100%}
+.btn[disabled]{opacity:.6;cursor:wait}
+.btn .arr{transition:transform .2s var(--ease)}
+.btn:hover .arr{transform:translateX(3px)}
+
+/* 最上方：設計稿提示條 */
+.demo-bar{background:repeating-linear-gradient(135deg,#f0c46a 0 22px,#e6b65a 22px 44px);color:#1a1206}
+.demo-bar .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 16px;min-height:56px;padding-top:8px;padding-bottom:8px;text-align:center;font-size:20px;line-height:1.5}
+.demo-bar b{font-weight:900;letter-spacing:.12em;background:#1a1206;color:#f0c46a;padding:2px 14px;border-radius:4px}
+
+/* 導覽列 */
+.nav{position:sticky;top:0;z-index:50;background:rgba(14,23,18,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line-ink)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:72px}
+.brand{display:flex;align-items:center;gap:12px;min-height:44px;text-decoration:none}
+.seal{width:44px;height:44px;border:1.5px solid var(--amber);border-radius:4px;display:grid;place-items:center;flex:none;font:900 22px/1 var(--serif);color:var(--amber)}
+.brand b{font:900 24px/1 var(--serif);letter-spacing:.12em}
+.nav ul{display:flex;gap:4px;list-style:none;margin:0;padding:0}
+.nav ul a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;text-decoration:none;font-size:20px;color:var(--on-ink-mute);letter-spacing:.06em;transition:color .2s}
+.nav ul a:hover{color:var(--amber-hi)}
+.nav-cta{min-height:48px;padding:0 22px}
+.nav-cta .t-short{display:none}
+@media (max-width:900px){.nav ul{display:none}}
+@media (max-width:480px){.nav-cta .t-long{display:none}.nav-cta .t-short{display:inline}}
+
+/* 首屏：主標＋集結看板。背景是一面淡淡的格子牆 */
+.hero{position:relative;isolation:isolate;overflow:hidden;padding:clamp(48px,5.5vw,80px) 0 clamp(64px,7vw,104px);background:var(--ink)}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(rgba(217,164,65,.11) 1px,transparent 1px),linear-gradient(90deg,rgba(217,164,65,.11) 1px,transparent 1px);
+  background-size:64px 64px;background-position:center top;
+  -webkit-mask-image:radial-gradient(110% 85% at 75% 30%,#000 0%,rgba(0,0,0,.45) 50%,transparent 82%);
+  mask-image:radial-gradient(110% 85% at 75% 30%,#000 0%,rgba(0,0,0,.45) 50%,transparent 82%)}
+.hero::after{content:"";position:absolute;z-index:-1;pointer-events:none;width:900px;height:900px;right:-260px;top:-300px;background:radial-gradient(closest-side,rgba(217,164,65,.2),transparent 72%)}
+.hero-in{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.95fr);gap:clamp(40px,5vw,72px);align-items:center}
+.hero h1{font-size:clamp(46px,6.2vw,88px);line-height:1.14;margin:20px 0 26px}
+.hero-sub{font:600 clamp(24px,2.4vw,34px)/1.5 var(--serif);color:var(--on-ink)}
+.ctas{display:flex;flex-wrap:wrap;gap:14px;margin-top:40px}
+.hero-note{margin-top:28px;font-size:20px;color:var(--on-ink-mute);max-width:30em}
+.tally{border:1px solid rgba(217,164,65,.45);border-radius:32px 0 32px 0;padding:clamp(24px,3vw,40px);background:linear-gradient(180deg,rgba(28,45,35,.92),rgba(20,33,26,.92));box-shadow:0 40px 80px -40px rgba(0,0,0,.8)}
+.tally-label{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 12px;font:500 20px/1.4 var(--sans);letter-spacing:.12em}
+.live{display:inline-flex;align-items:center;gap:10px;color:var(--amber-hi)}
+.live::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--amber-hi);animation:pulse 2s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(240,196,106,.6)}100%{box-shadow:0 0 0 14px rgba(240,196,106,0)}}
+.demo-tag{padding:0 12px;border:1px dashed rgba(240,196,106,.6);border-radius:999px;color:var(--amber-hi);letter-spacing:.06em}
+.tally-big{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px;margin:10px 0 18px}
+.tally-big b{font:900 clamp(96px,9vw,136px)/1 var(--serif);color:var(--amber-hi);font-variant-numeric:tabular-nums;letter-spacing:0}
+.tally-big span{font-size:22px;line-height:1.5;color:var(--on-ink-mute)}
+.tally-big span b{font:700 22px/1 var(--sans);color:var(--on-ink)}
+.bar{height:16px;border-radius:999px;background:rgba(239,230,210,.1);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--amber-deep),var(--amber-hi));transition:width 1.4s var(--ease)}
+.tally-left{margin-top:10px;font-size:20px;color:var(--on-ink-mute)}
+.tally-stats{list-style:none;margin:24px 0 0;padding:20px 0 0;border-top:1px solid var(--line-ink);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tally-stats li{font-size:20px;color:var(--on-ink-mute);line-height:1.4}
+.tally-stats b{display:block;font:900 clamp(30px,3vw,40px)/1.1 var(--serif);color:var(--on-ink);font-variant-numeric:tabular-nums}
+.tally-faces-h{margin-top:22px;font-size:20px;color:var(--on-ink-mute)}
+.tally-faces{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.tally-faces li{display:inline-flex;align-items:center;gap:8px;padding:2px 14px;border:1px solid var(--line-ink);border-radius:999px;font-size:20px}
+.tally-faces b{color:var(--amber-hi);font-variant-numeric:tabular-nums}
+@media (max-width:960px){.hero-in{grid-template-columns:1fr}}
+@media (max-width:560px){.ctas .btn{flex:1 1 100%}.hero h1{font-size:clamp(44px,12.4vw,56px)}}
+
+/* 臉的顏色（一個人可以有好幾張臉） */
+.f-ai{--fc:#f0c46a}.f-charity{--fc:#7fc8a0}.f-rongtree{--fc:#d98e62}.f-volunteer{--fc:#8fb7e8}.f-partner{--fc:#a7b2a3}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;flex:none;background:var(--fc);box-shadow:0 0 0 1px rgba(0,0,0,.2)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.ftag{display:inline-flex;align-items:center;gap:8px;padding:2px 12px;border:1px solid var(--paper-line);border-radius:999px;background:#fff;color:var(--on-paper-mute);font-size:20px;line-height:1.5}
+.ftag::before{content:"";width:10px;height:10px;border-radius:50%;flex:none;background:var(--fc);box-shadow:0 0 0 1px rgba(0,0,0,.2)}
+
+/* 找資源 */
+.finder{background:#fbf6ea;border:1px solid var(--paper-line);border-radius:28px 0 28px 0;padding:clamp(20px,3vw,36px);box-shadow:0 30px 60px -40px rgba(60,40,10,.35)}
+.flabel{display:block;margin:0 0 12px;font:700 20px/1.4 var(--sans);letter-spacing:.1em;color:var(--on-paper)}
+.searchbox{position:relative}
+.searchbox svg{position:absolute;left:22px;top:50%;width:26px;height:26px;transform:translateY(-50%);stroke:var(--on-paper);fill:none;stroke-width:2.4;pointer-events:none}
+.searchbox input{width:100%;min-height:68px;padding:0 20px 0 62px;font-size:22px;color:var(--on-paper);background:#fff;border:2px solid var(--on-paper);border-radius:999px}
+.searchbox input::placeholder{color:#8a907f}
+.searchbox input:focus{outline:none;border-color:var(--amber-deep);box-shadow:0 0 0 4px rgba(217,164,65,.25)}
+.frow{margin-top:28px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;border:1px solid var(--paper-line);border-radius:999px;background:#fff;color:var(--on-paper);font-size:20px;line-height:1.2;cursor:pointer;transition:border-color .2s,background .2s,color .2s}
+.chip b{font-weight:700;color:var(--amber-deep);font-variant-numeric:tabular-nums}
+.chip:hover{border-color:var(--amber-deep)}
+.chip[aria-pressed="true"]{background:var(--on-paper);border-color:var(--on-paper);color:var(--paper)}
+.chip[aria-pressed="true"] b{color:var(--amber-hi)}
+.chip.zero{opacity:.5}
+.hint{margin-top:10px;font-size:20px;color:var(--on-paper-mute)}
+.dg{display:grid;grid-template-columns:220px minmax(0,1fr);gap:12px 20px;align-items:start;padding:18px 0;border-top:1px dashed var(--paper-line)}
+.dg:first-of-type{border-top:0;padding-top:0}
+.dg-h{font:700 20px/1.4 var(--sans);color:var(--on-paper);padding-top:10px}
+.dg-h span{display:block;font-weight:400;color:var(--on-paper-mute)}
+@media (max-width:760px){.dg{grid-template-columns:1fr}.dg-h{padding-top:0}}
+.rhead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 20px;margin:clamp(32px,4vw,48px) 0 16px}
+.rcount{font:700 22px/1.4 var(--sans)}
+.rcount b{font:900 36px/1 var(--serif);color:var(--amber-deep);margin:0 6px;font-variant-numeric:tabular-nums}
+.linkbtn{display:inline-flex;align-items:center;min-height:44px;padding:0 6px;background:none;border:0;color:var(--amber-deep);font-size:20px;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+.need{margin:0 0 18px;padding:12px 18px;border-left:3px solid var(--amber-deep);background:rgba(217,164,65,.12);font-size:20px}
+.results{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:18px}
+.pcard{display:flex;flex-direction:column;gap:10px;height:100%;padding:24px;background:var(--card);border:1px solid var(--paper-line);border-radius:26px 0 26px 0;transition:border-color .2s,box-shadow .2s}
+.pcard:hover{border-color:var(--amber-deep);box-shadow:0 20px 40px -28px rgba(60,40,10,.5)}
+.pc-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:20px;color:var(--on-paper-mute)}
+.seatno{font:500 20px/1 var(--sans);letter-spacing:.06em;color:var(--on-paper-mute)}
+.seatno b{font:900 32px/1 var(--serif);color:var(--amber-deep);letter-spacing:.02em}
+.pcard h3{font-size:26px}
+.pc-dom{font-size:20px;font-weight:700;color:var(--amber-deep)}
+.pc-line{flex:1;font-size:20px;line-height:1.7}
+.pcard .btn{margin-top:8px;width:100%}
+.more-row{display:flex;justify-content:center;margin-top:28px}
+.empty{margin-top:8px;padding:22px 24px;border:1px dashed var(--paper-line);border-radius:var(--r);font-size:20px;color:var(--on-paper-mute)}
+.empty a{display:inline-flex;align-items:center;min-height:44px;color:var(--amber-deep);font-weight:700}
+
+/* 席次牆：No.001～No.100 創始席（做法同榮樹下 1～100 格） */
+.wall{background:var(--ink-2)}
+.legend{display:flex;flex-wrap:wrap;gap:10px 28px;margin:0 0 18px;font-size:20px;color:var(--on-ink-mute)}
+.legend i{display:inline-block;width:22px;height:22px;margin-right:8px;vertical-align:-3px;border:1px solid rgba(239,230,210,.35);border-radius:8px 0 8px 0}
+.legend i.on{background:var(--amber);border-color:var(--amber)}
+.legend i.held{border-style:dashed;border-color:rgba(217,164,65,.75)}
+.grid100{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:8px}
+.grid100 li{display:flex;min-width:0}
+.cell{flex:1;min-width:0;min-height:84px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;margin:0;padding:8px 2px;border:1px solid var(--line-ink);border-radius:22px 0 22px 0;background:rgba(239,230,210,.025);color:rgba(239,230,210,.6);font:500 20px/1.15 var(--sans);letter-spacing:0;font-variant-numeric:tabular-nums;text-decoration:none;cursor:pointer;transition:border-color .2s,background .2s,color .2s}
+.cell .w{max-width:100%;overflow:hidden;white-space:nowrap;color:rgba(217,164,65,.85)}
+.cell:not(.on):not(.held):hover{border-color:var(--amber);color:var(--on-ink)}
+.cell.on{background:var(--amber);border-color:var(--amber);color:#1a1206;font-weight:700;box-shadow:0 0 26px -10px rgba(240,196,106,.7)}
+.cell.on .w{color:#3a2508}
+.cell.on:hover{background:var(--amber-hi)}
+.cell.held{cursor:default;border-style:dashed;border-color:rgba(217,164,65,.6);color:rgba(239,230,210,.75)}
+.cell.held .w{color:var(--on-ink-mute)}
+@media (max-width:640px){
+  .grid100{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+  .cell{min-height:68px;border-radius:16px 0 16px 0}
+}
+
+/* 許願池 */
+.wish-in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(40px,6vw,96px);align-items:start}
+.wish h2{margin:14px 0 20px}
+.wish-form{margin-top:32px}
+.wish-row{display:flex;flex-wrap:wrap;gap:12px}
+.wish-row input{flex:1 1 280px;min-width:0;min-height:64px;padding:0 20px;font-size:21px;color:var(--on-paper);background:#fff;border:2px solid var(--on-paper);border-radius:14px}
+.wish-row input::placeholder{color:#8a907f}
+.wish-row input:focus{outline:none;border-color:var(--amber-deep);box-shadow:0 0 0 4px rgba(217,164,65,.25)}
+.wish-row .btn{min-height:64px;flex:0 0 auto}
+.form-ok{margin-top:12px;font-size:20px;font-weight:700;color:#2f6b45}
+.paper .err{color:#a8412a}
+.wish-stats{margin-top:22px;font-size:20px;color:var(--on-paper-mute)}
+.wish-stats b{font:900 30px/1 var(--serif);color:var(--amber-deep);margin:0 4px;font-variant-numeric:tabular-nums}
+.wl-h{font-size:clamp(22px,2.2vw,28px);font-weight:900}
+.wl-sub{margin-top:4px;font-size:20px;color:var(--on-paper-mute)}
+.wishes{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:12px}
+.wi{padding:18px 22px;background:var(--card);border:1px solid var(--paper-line);border-radius:22px 0 22px 0}
+.wi-t{font:600 21px/1.6 var(--serif);color:var(--on-paper)}
+.wi-m{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:8px;font-size:20px;color:var(--on-paper-mute)}
+.st{font-weight:700}
+.st.ok{color:var(--amber-deep)}
+.wi.mine{border-style:dashed;border-color:var(--amber-deep);background:rgba(217,164,65,.1)}
+@media (max-width:900px){.wish-in{grid-template-columns:1fr}}
+@media (max-width:560px){.wish-row .btn{flex:1 1 100%}}
+
+/* 入選卡 */
+.cards{background:var(--ink)}
+.how{list-style:none;margin:24px 0 0;padding:0;counter-reset:h}
+.how li{counter-increment:h;display:grid;grid-template-columns:52px minmax(0,1fr);gap:0 10px;padding:12px 0;border-top:1px solid var(--line-ink);font-size:20px;color:var(--on-ink-mute)}
+.how li::before{content:"0" counter(h);grid-row:span 2;font:600 20px/1.7 var(--sans);color:var(--amber);letter-spacing:.1em}
+.how b{color:var(--on-ink);font-weight:700}
+.showcase{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(18px,2.4vw,32px);row-gap:12px}
+/* 三張卡用 subgrid 對齊：卡一樣高、分享鈕在同一條線，某張下面跳出提示也不會撐高別張 */
+.showcase > li{display:grid;grid-row:span 3;grid-template-rows:subgrid;min-width:0}
+.showcase .tcard{align-self:stretch;width:100%}
+.cards .sec-head{align-items:start}
+@media (max-width:860px){
+  .showcase{grid-template-columns:minmax(0,420px);justify-content:center;row-gap:28px}
+  .showcase > li{display:flex;flex-direction:column;gap:12px;grid-row:auto}
+}
+.tcard{container-type:inline-size;aspect-ratio:4/5;display:flex;flex-direction:column;padding:28px 26px;border:1.5px solid rgba(217,164,65,.85);outline:1px solid rgba(217,164,65,.35);outline-offset:-10px;border-radius:6px;
+  background:radial-gradient(120% 70% at 100% 0%,rgba(217,164,65,.24),transparent 60%),
+    linear-gradient(rgba(217,164,65,.07) 1px,transparent 1px) 0 0/32px 32px,
+    linear-gradient(90deg,rgba(217,164,65,.07) 1px,transparent 1px) 0 0/32px 32px,
+    linear-gradient(180deg,#1c2d23,#0e1712);
+  box-shadow:0 40px 70px -40px rgba(0,0,0,.9)}
+.tc-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font:500 20px/1.3 var(--sans);letter-spacing:.16em;color:var(--amber)}
+.tc-head .seal{width:38px;height:38px;font-size:20px}
+.tc-mid{margin:auto 0;padding:8px 0 14px}
+.tc-kicker{font:600 22px/1.4 var(--serif);color:var(--on-ink)}
+.tc-no{font:900 clamp(64px,26cqi,112px)/1 var(--serif);color:var(--amber-hi);letter-spacing:0;font-variant-numeric:tabular-nums;margin-top:6px}
+.tc-no span{font-size:clamp(22px,8cqi,34px);margin-right:6px;color:var(--amber)}
+.tc-name{font:900 clamp(26px,9cqi,34px)/1.3 var(--serif)}
+.tc-dom{margin-top:4px;font-size:20px;font-weight:700;color:var(--amber-hi)}
+.tc-line{margin-top:8px;font-size:20px;line-height:1.6;color:var(--on-ink-mute);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tc-foot{margin-top:14px;padding-top:12px;border-top:1px solid var(--line-ink);font-size:20px;color:var(--on-ink-mute);letter-spacing:.1em}
+.share-msg{font-size:20px;color:var(--on-ink-mute)}
+.share-msg:empty{display:none}
+.share-url{display:block;width:100%;min-height:48px;margin-top:8px;padding:8px 12px;background:rgba(239,230,210,.06);border:1px solid rgba(239,230,210,.3);border-radius:var(--r);color:var(--on-ink);font-size:20px}
+
+/* 加入區＋關係階梯 */
+.join{background:var(--ink-3);color-scheme:dark}
+.ladder{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-bottom:clamp(40px,5vw,64px);padding:14px 20px;border:1px solid var(--line-ink);border-radius:var(--r);background:rgba(14,23,18,.4)}
+.ladder-h{font-size:20px;letter-spacing:.12em;color:var(--amber)}
+.ladder ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 0}
+.ladder li{display:inline-flex;align-items:center;font-size:20px;color:var(--on-ink-mute)}
+.ladder li + li::before{content:"→";margin:0 10px;color:var(--amber)}
+.ladder li span{padding:2px 12px;border:1px solid var(--line-ink);border-radius:999px}
+.ladder li.here span{background:var(--amber);border-color:var(--amber);color:#1a1206;font-weight:700}
+.ladder-note{font-size:20px;color:var(--on-ink-mute)}
+.join-in{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(40px,6vw,90px);align-items:start}
+.join h2{margin:14px 0 20px}
+.join-gets{list-style:none;margin:28px 0 0;padding:0;border-top:1px solid var(--line-ink)}
+.join-gets li{padding:12px 0;border-bottom:1px solid var(--line-ink);font-size:20px;color:var(--on-ink-mute)}
+.join-gets b{color:var(--on-ink)}
+@media (max-width:900px){.join-in{grid-template-columns:1fr}}
+
+/* 表單（同榮樹下） */
+form.box{background:rgba(14,23,18,.6);border:1px solid var(--line-ink);border-radius:10px;padding:clamp(18px,3.5vw,44px)}
+.field{display:flex;flex-direction:column;margin-bottom:18px}
+.field label{margin-bottom:8px;font-size:20px;letter-spacing:.04em;color:#d8d6c6}
+.field label .opt{color:var(--on-ink-mute)}
+.field input,.field textarea,.field select{min-height:56px;padding:12px 14px;font:400 20px/1.5 var(--sans);color:var(--on-ink);background:rgba(239,230,210,.04);border:1px solid rgba(239,230,210,.25);border-radius:var(--r);transition:border-color .2s,background .2s}
+.field select{background-color:#1c2d23}
+.field textarea{min-height:110px;resize:vertical}
+.field input::placeholder,.field textarea::placeholder{color:#8f9a8c}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--amber);background-color:rgba(239,230,210,.08)}
+.req{color:var(--amber)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.consent{display:flex;gap:14px;align-items:flex-start;min-height:56px;margin:4px 0 22px;padding:14px 16px;border:1px solid var(--line-ink);border-radius:var(--r);font-size:20px;line-height:1.6;cursor:pointer}
+.consent input{flex:none;width:28px;height:28px;margin:2px 0 0;accent-color:var(--amber);cursor:pointer}
+.consent b{color:var(--amber-hi)}
+.err{font-size:20px;color:#f0a58c}
+.err:empty{display:none}
+.errsum{display:none;margin-bottom:20px;padding:12px 16px;border:1px solid #e48a6e;border-radius:var(--r);background:rgba(228,138,110,.08);font-size:20px;color:#f3c3b3}
+.errsum.show{display:block}
+.errsum ul{margin:6px 0 0;padding-left:22px}
+.errsum a{display:inline-flex;align-items:center;min-height:44px;color:inherit;text-underline-offset:4px}
+.form-note{margin-top:14px;font-size:20px;color:var(--on-ink-mute)}
+.done{display:none}
+.done.show{display:block}
+.done h3{font-size:28px;margin:12px 0 14px}
+.done .btn{margin-top:22px}
+
+/* 彈出視窗：看人物卡、請大樹團隊引薦（同榮樹下彈窗） */
+html:has(.dlg[open]){overflow:hidden}
+.dlg{width:min(640px,calc(100% - 24px));max-width:none;max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;padding:0;border:1px solid rgba(217,164,65,.6);border-radius:12px;background:var(--ink-2);color:var(--on-ink);color-scheme:dark;box-shadow:0 40px 80px -30px rgba(0,0,0,.9)}
+.dlg::backdrop{background:rgba(6,10,8,.75)}
+.dlg-in{position:relative;padding:clamp(24px,4vw,40px)}
+.dlg-x{position:absolute;top:10px;right:10px;width:52px;height:52px;border:0;border-radius:50%;background:transparent;color:var(--on-ink);font:400 34px/1 var(--sans);cursor:pointer}
+.dlg-x:hover{background:rgba(239,230,210,.08);color:var(--amber-hi)}
+.dlg h3{font-size:clamp(28px,3.4vw,36px);font-weight:900;margin:10px 56px 12px 0}
+.dlg .ftag{background:transparent;border-color:var(--line-ink);color:var(--on-ink)}
+.can{list-style:none;margin:20px 0 0;padding:0;border-top:1px solid var(--line-ink)}
+.can li{padding:12px 0;border-bottom:1px solid var(--line-ink);font-size:20px;color:var(--on-ink-mute)}
+.can b{display:block;color:var(--amber-hi);font-weight:700}
+.say{margin:20px 0 0;font:600 clamp(21px,2.2vw,24px)/1.6 var(--serif)}
+.ext{display:inline-flex;align-items:center;min-height:44px;margin-top:10px;color:var(--amber-hi);font-size:20px}
+.dlg .btn-block{margin-top:24px}
+.dlg .lead{margin-bottom:22px}
+.fine{margin-top:12px;font-size:20px;color:var(--on-ink-mute)}
+
+/* 頁尾 */
+footer{padding:clamp(72px,9vw,120px) 0 40px;background:var(--ink);text-align:center;border-top:1px solid var(--line-ink)}
+.blessing{font:900 clamp(30px,4.4vw,56px)/1.45 var(--serif);max-width:15em;margin:0 auto}
+.blessing em{font-style:normal;color:var(--amber-hi)}
+.foot-demo{display:inline-block;margin-top:32px;padding:6px 20px;border:1px dashed rgba(217,164,65,.6);border-radius:999px;font-size:20px;color:var(--amber-hi)}
+footer .base{margin-top:56px;padding-top:20px;border-top:1px solid var(--line-ink);display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 28px;font-size:20px;color:var(--on-ink-mute)}
+footer .base a{display:inline-flex;align-items:center;min-height:44px;padding:0 4px;text-decoration:none;white-space:nowrap}
+footer .base a:hover{color:var(--amber-hi)}
+.noscript{padding:20px;background:#a8412a;color:#fff;text-align:center;font-size:20px}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition-duration:.01ms!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要內容</a>
+
+<div class="demo-bar" id="top" role="note">
+  <div class="wrap"><b>設計稿 ‧ 示範資料</b><span>本頁的人名、數字、許願都是示範，按鈕不會真的送出。</span></div>
+</div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="大樹軍火庫 回到頂端"><span class="seal" aria-hidden="true">庫</span><b>大樹軍火庫</b></a>
+    <nav aria-label="主選單">
+      <ul>
+        <li><a href="#find">找資源</a></li>
+        <li><a href="#wall">創始席</a></li>
+        <li><a href="#wish">許願池</a></li>
+        <li><a href="#card">入選卡</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn-ghost nav-cta" href="#join"><span class="t-long">我也想被看見</span><span class="t-short">加入</span></a>
+  </div>
+</header>
+<noscript><p class="noscript">這個頁面要開啟 JavaScript，才看得到名單和計數器。</p></noscript>
+
+<main id="main">
+<!-- 1. 首屏：主標、副標、即時人數、兩個最大的按鈕 -->
+<section class="hero" aria-labelledby="hero-h">
+  <div class="wrap hero-in">
+    <div>
+      <p class="eyebrow">大樹軍火庫 ‧ 強者總入口</p>
+      <h1 id="hero-h">你要的資源，<br><em>這裡找得到</em>。</h1>
+      <p class="hero-sub">你的優秀與想法，<br>也會在這裡被看見。</p>
+      <div class="ctas">
+        <a class="btn btn-amber btn-xl" href="#find">找資源 <span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost btn-xl" href="#join">我也想被看見</a>
+      </div>
+      <p class="hero-note">需要的人，找得到資源；有本事的人，被看見。<br>兩邊在同一頁，才是平台。</p>
+    </div>
+    <aside class="tally" aria-labelledby="tally-h">
+      <p class="tally-label"><span class="live" id="tally-h">即時人數</span><span class="demo-tag" id="c-demo">示範數字</span></p>
+      <p class="tally-big"><b id="c-joined">0</b><span>位已集結<br>目標 <b id="c-goal">200</b> 位</span></p>
+      <div class="bar" id="c-bar" role="progressbar" aria-label="集結進度" aria-valuemin="0" aria-valuemax="200" aria-valuenow="0"><i></i></div>
+      <p class="tally-left" id="c-left"></p>
+      <ul class="tally-stats">
+        <li><b id="c-public">0</b>位已上架</li>
+        <li><b id="c-wishes">0</b>則許願</li>
+        <li><b id="c-intro">0</b>次引薦</li>
+      </ul>
+      <p class="tally-faces-h">四群人，同一面牆</p>
+      <ul class="tally-faces" id="c-faces"></ul>
+    </aside>
+  </div>
+</section>
+
+<!-- 2. 找資源（需求端）：搜尋、用「能幫你解決什麼」分類、換臉篩選、人物卡 -->
+<section class="paper sec" id="find" aria-labelledby="find-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow">找資源 ‧ 需要的人</p><h2 id="find-h">你想解決<em>什麼</em>？</h2></div>
+      <p class="lead">打出你的難題，或點下面的分類。看到對的人，按「請大樹團隊幫我引薦」——我們會先問過對方，雙方都同意才牽線，不會直接給電話。</p>
+    </div>
+    <div class="finder">
+      <label class="flabel" for="q">搜尋姓名、領域、一句話</label>
+      <div class="searchbox">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+        <input id="q" type="search" placeholder="例：短影音、AI" autocomplete="off" enterkeyhint="search">
+      </div>
+      <div class="frow">
+        <p class="flabel" id="faces-h">換個看法</p>
+        <div class="chips" id="faces" role="group" aria-labelledby="faces-h"></div>
+        <p class="hint">一個人可能同時是 AI 導師、公益企業家，也是志工。換看法只是換個角度看同一群人，不會重複算。</p>
+      </div>
+      <div class="frow">
+        <p class="flabel">用「能幫你解決什麼」來找</p>
+        <div id="domains"></div>
+      </div>
+    </div>
+    <div class="rhead">
+      <p class="rcount" id="r-count" aria-live="polite"></p>
+      <button class="linkbtn" type="button" id="r-clear" hidden>清除條件</button>
+    </div>
+    <p class="need" id="r-need" hidden></p>
+    <ul class="results" id="results"></ul>
+    <div class="more-row"><button class="btn btn-line" type="button" id="r-more" hidden></button></div>
+    <p class="empty" id="r-empty" hidden>這個條件還沒有人。<a href="#wish">把需求丟進許願池，我們幫你找 →</a></p>
+  </div>
+</section>
+
+<!-- 3. 席次牆：No.001～No.100 創始席 -->
+<section class="sec wall" id="wall" aria-labelledby="wall-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow">創始席 ‧ No.001～No.100</p>
+        <h2 id="wall-h"><span class="num" id="w-taken">0</span> 席已入座，<br>還有 <span class="num" id="w-open">100</span> 席等你。</h2></div>
+      <p class="lead">格子上寫的，是這位夥伴最拿手的領域。亮著的格子點一下，看他能幫你什麼；寫著「等你」的格子，就是留給你的位子。</p>
+    </div>
+    <p class="legend"><span><i class="on" aria-hidden="true"></i>已入席：點一下看他能幫什麼</span><span><i class="held" aria-hidden="true"></i>保留：已入席，還沒公開</span><span><i aria-hidden="true"></i>等你：點一下加入</span></p>
+    <ol class="grid100" id="seat-grid" aria-label="創始席 100 席"></ol>
+    <div class="sec-cta"><a class="btn btn-amber btn-xl" href="#join">坐上一個創始席 <span class="arr" aria-hidden="true">→</span></a></div>
+  </div>
+</section>
+
+<!-- 4. 許願池（需求端）：說出你要找什麼 -->
+<section class="paper sec wish" id="wish" aria-labelledby="wish-h">
+  <div class="wrap wish-in">
+    <div>
+      <p class="eyebrow">許願池 ‧ 需要的人</p>
+      <h2 id="wish-h">說出你<br><em>要找什麼</em>。</h2>
+      <p class="lead">找不到人沒關係，把你要找的寫下來。大樹團隊會一則一則看，找到對的人就幫你牽線。大家的許願，也讓有本事的人知道：外面需要什麼。</p>
+      <form class="wish-form" id="wf" novalidate>
+        <label class="flabel" for="w-text">我想找……</label>
+        <div class="wish-row">
+          <input id="w-text" name="text" maxlength="80" placeholder="例：想找短影音團隊" autocomplete="off">
+          <button class="btn btn-amber" type="submit">丟進許願池</button>
+        </div>
+        <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <p class="err" id="w-err" role="alert"></p>
+        <p class="form-ok" id="w-ok" role="status"></p>
+      </form>
+      <p class="wish-stats">已經有<b id="w-count">0</b>則許願，幫忙牽線<b id="w-intro">0</b>次</p>
+    </div>
+    <div>
+      <h3 class="wl-h">大家在找什麼</h3>
+      <p class="wl-sub">新的許願經過大樹團隊看過，才會放上來。</p>
+      <ul class="wishes" id="wishes" aria-live="polite"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- 5. 入選卡：可以分享的卡 -->
+<section class="sec cards" id="card" aria-labelledby="card-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><p class="eyebrow">入選卡 ‧ 被看見的人</p><h2 id="card-h">我入選了<br><em>大樹軍火庫</em>。</h2></div>
+      <div>
+        <p class="lead">每一位公開上架的夥伴，都會拿到一張自己的入選卡。分享出去，朋友一點就看到你能幫什麼。</p>
+        <ol class="how">
+          <li><b>被提名</b>朋友推薦你，或你自己填表</li>
+          <li><b>按「我同意上架」</b>你說好，才會公開</li>
+          <li><b>領卡分享</b>拿到席次編號和這張卡</li>
+        </ol>
+      </div>
+    </div>
+    <ul class="showcase" id="showcase"></ul>
+    <div class="sec-cta"><a class="btn btn-amber btn-xl" href="#join">我也想要一張卡 <span class="arr" aria-hidden="true">→</span></a></div>
+  </div>
+</section>
+
+<!-- 6. 加入區（供給端）＋ 7. 關係階梯 -->
+<section class="sec join" id="join" aria-labelledby="join-h">
+  <div class="wrap">
+    <div class="ladder" aria-label="關係階梯">
+      <span class="ladder-h">關係階梯</span>
+      <ol><li><span>路人</span></li><li class="here"><span>被看見</span></li><li><span>連結</span></li><li><span>合作</span></li><li><span>加入</span></li></ol>
+      <span class="ladder-note">填完下面這張表，你就從「路人」走到「被看見」。</span>
+    </div>
+    <div class="join-in">
+      <div>
+        <p class="eyebrow">加入 ‧ 有本事的人</p>
+        <h2 id="join-h">我也想<br><em>被看見</em>。</h2>
+        <p class="lead">花 5 分鐘填完。大樹團隊看過、你按下「我同意上架」，就會拿到席次編號和入選卡。</p>
+        <ul class="join-gets">
+          <li><b>一個席次</b>：前 100 位是創始席</li>
+          <li><b>一張入選卡</b>：可以分享到 LINE、FB</li>
+          <li><b>被找到的機會</b>：需要你的人，透過大樹團隊找到你</li>
+        </ul>
+      </div>
+      <div>
+        <form class="box" id="jf" novalidate>
+          <div class="errsum" id="j-errsum" role="alert" tabindex="-1"></div>
+          <div class="field"><label for="j-name">姓名或品牌名 <span class="req">*</span> <span class="opt">（會公開）</span></label><input id="j-name" name="name" autocomplete="name"></div>
+          <div class="field"><label for="j-domain">最拿手的領域 <span class="req">*</span></label><select id="j-domain" name="domain"></select></div>
+          <div class="field"><label for="j-line">一句話，說你能幫什麼 <span class="req">*</span> <span class="opt">（會公開，40 字內）</span></label><input id="j-line" name="line" maxlength="40" placeholder="例：帶公司把 AI 用起來"></div>
+          <div class="field"><label for="j-link">要公開的連結 <span class="opt">（官網、FB、IG 都可以，可不填）</span></label><input id="j-link" name="link" inputmode="url" autocomplete="url" placeholder="https://"></div>
+          <div class="field"><label for="j-contact">電話或 Email <span class="req">*</span> <span class="opt">（不公開，只給大樹團隊聯絡你）</span></label><input id="j-contact" name="contact" autocomplete="email"></div>
+          <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <label class="consent"><input type="checkbox" name="consent" id="j-consent"><span><b>我同意上架</b>：我的姓名、領域、一句話和公開連結，會出現在大樹軍火庫。之後想下架，跟大樹團隊說一聲就好。</span></label>
+          <button class="btn btn-amber btn-xl btn-block" type="submit">送出，我想被看見 <span class="arr" aria-hidden="true">→</span></button>
+          <p class="form-note" id="j-note"></p>
+        </form>
+        <div class="done" id="j-done" role="status" tabindex="-1">
+          <p class="eyebrow" id="j-done-eye">已收到（示範）</p>
+          <h3>謝謝你，願意被看見。</h3>
+          <p class="lead" id="j-done-txt"></p>
+          <button class="btn btn-ghost" type="button" id="j-again">再填一次</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- 8. 頁尾 -->
+<footer>
+  <div class="wrap">
+    <p class="blessing">強者彼此看得見，<br>好事就<em>找得到人</em>。</p>
+    <p class="foot-demo">本頁為設計稿，資料皆為示範</p>
+    <div class="base">
+      <span>© 2026 大樹軍火庫 ‧ 設計稿</span>
+      <a href="https://player.soundon.fm/p/01bac58b-741f-4cbc-8fa6-58dd45f24923" target="_blank" rel="noopener">SoundOn Podcast</a>
+      <a href="https://lin.ee/OkaMlzx" target="_blank" rel="noopener">榮樹下 LINE@</a>
+      <a href="https://event.bymyway.com/curated/social-club/#join" target="_blank" rel="noopener">真公益・企業家俱樂部</a>
+      <a href="#top">回到頂端 ↑</a>
+    </div>
+  </div>
+</footer>
+
+<dialog class="dlg" id="dlg" aria-labelledby="dlg-h">
+  <div class="dlg-in">
+    <button class="dlg-x" type="button" aria-label="關閉">×</button>
+    <div id="dlg-body"></div>
+  </div>
+</dialog>
+
+<script>
+const DEMO = true; // 設計稿開關：true＝所有表單只顯示「已收到（示範）」，不發任何網路請求；接好真資料後改 false 才會打 API
+
+/* ================= 資料區（軍師之後把這一段換成真名冊 API） =================
+   畫面上的人物、計數器、許願、入選卡，全部從這裡畫出來。
+   ROSTER  每人一筆：no 席次編號、name 姓名、faces 臉（陣列，可多張）、domains 領域（陣列，名稱要跟 DOMAINS 一樣）、
+           line 一句話、consent 是否同意公開（只有 true 才畫出來）、link 公開連結（選填，只接受 https://）。
+           consent 不是 true 的人：不畫名字，只在席次牆把那一格標成「保留」。正式 API 只要給 {no, consent:false} 就好，別送個資。
+   COUNTERS joined 已集結人數（含還沒公開的）、goal 目標、wishes 許願則數、introductions 引薦次數。
+   WISHES  許願清單：text 內容、from 哪裡來（地區 ‧ 行業，不放人名）、date 日期、matched 已牽線幾位（0＝找人中）。 */
+const API = '/api/works/contact';   // 教練 Mac 上的伺服器 → 「活動報名即時通知」群（欄位格式照抄榮樹下「預約合作」表單）
+const SITE = 'arsenal';             // 待軍師確認：伺服器是否接受這個 site 名稱
+
+const FACES = {                     // 臉：key 給程式用，label 給人看
+  ai:        {label:'真 AI'},
+  charity:   {label:'真公益'},
+  rongtree:  {label:'榮樹下嘉賓'},
+  volunteer: {label:'志工'}
+};
+const DOMAINS = [                   // group：biz＝真 AI 導師席 8 大領域；good＝公益領域（示範分類，待軍師換成真公益 9 大領域）
+  {group:'biz',  name:'搜尋行銷',       short:'搜尋', need:'讓客戶在網路上搜得到你'},
+  {group:'biz',  name:'媒體曝光',       short:'媒體', need:'讓媒體報導你，讓更多人聽見你'},
+  {group:'biz',  name:'在地行銷',       short:'在地', need:'讓附近的人走進你的店'},
+  {group:'biz',  name:'資本與商業模式', short:'資本', need:'把怎麼賺錢想清楚，找到資金'},
+  {group:'biz',  name:'數位轉型',       short:'數位', need:'把紙本和人工流程搬上線'},
+  {group:'biz',  name:'協會與政府補助', short:'補助', need:'申請政府補助，接上協會資源'},
+  {group:'biz',  name:'AI 落地',        short:'AI',   need:'把 AI 真的用進每天的工作'},
+  {group:'biz',  name:'音樂藝文',       short:'藝文', need:'辦一場有質感的活動或藝文合作'},
+  {group:'good', name:'偏鄉教育',       short:'教育', need:'讓偏鄉孩子有好的學習機會'},
+  {group:'good', name:'長者陪伴',       short:'長者', need:'陪伴長輩，照顧家中老人'},
+  {group:'good', name:'弱勢就業',       short:'就業', need:'幫需要的人找到穩定的工作'},
+  {group:'good', name:'環境永續',       short:'環境', need:'減碳減塑，讓環境更好'},
+  {group:'good', name:'食物分享',       short:'食物', need:'讓多出來的食物送到需要的人手上'},
+  {group:'good', name:'身障支持',       short:'身障', need:'支持身障朋友就業與生活'},
+  {group:'good', name:'動物保護',       short:'動保', need:'照顧流浪動物，推動認養'},
+  {group:'good', name:'社區營造',       short:'社區', need:'讓社區有活力，鄰里互相幫忙'},
+  {group:'good', name:'急難救助',       short:'急難', need:'災難或急難時，馬上有人幫忙'}
+];
+const ROSTER = [                    // 示範資料：全部是假的
+  {no:1,  name:'示範夥伴 01', faces:['ai','rongtree'],        domains:['AI 落地','數位轉型'],        line:'一個月，帶中小企業把 AI 用進每天的工作流程。', consent:true, link:'https://example.com/'},
+  {no:2,  name:'示範夥伴 02', faces:['ai'],                   domains:['搜尋行銷'],                  line:'讓你的店在 Google 搜得到、地圖找得到。', consent:true},
+  {no:3,  name:'示範夥伴 03', faces:['charity'],              domains:['偏鄉教育'],                  line:'每週陪偏鄉孩子上一堂線上英文課，已經陪了三年。', consent:true},
+  {no:4,  name:'示範夥伴 04', faces:[],                       domains:['資本與商業模式'],            line:'幫小公司把「怎麼賺錢」講清楚，再去找錢。', consent:true},
+  {no:5,  name:'示範夥伴 05', faces:['volunteer'],            domains:['社區營造'],                  line:'活動現場的大小事，交給我排班。', consent:true},
+  {no:6,  name:'示範夥伴 06', faces:['ai'],                   domains:['媒體曝光'],                  line:'把你的故事，寫成記者願意報的新聞稿。', consent:true},
+  {no:7,  name:'示範夥伴 07', faces:['ai'],                   domains:['數位轉型'],                  line:'（還沒同意公開，這行不會出現在畫面上）', consent:false},
+  {no:8,  name:'示範夥伴 08', faces:['charity','volunteer'],  domains:['食物分享'],                  line:'把賣場的即期品，當天送到需要的家庭。', consent:true},
+  {no:9,  name:'示範夥伴 09', faces:['ai'],                   domains:['協會與政府補助'],            line:'陪你看懂政府補助，從寫計畫一路到結案。', consent:true},
+  {no:10, name:'示範夥伴 10', faces:[],                       domains:['在地行銷'],                  line:'讓方圓三公里內的人，一想到就先想到你。', consent:true},
+  {no:11, name:'示範夥伴 11', faces:['rongtree','charity'],   domains:['環境永續'],                  line:'用回收材料做家具，順便教大家怎麼減碳。', consent:true},
+  {no:12, name:'示範夥伴 12', faces:['ai'],                   domains:['AI 落地'],                   line:'用 AI 幫業務每天少做兩小時報表。', consent:true},
+  {no:13, name:'示範夥伴 13', faces:['volunteer'],            domains:['長者陪伴'],                  line:'每週二下午，陪社區長輩說故事、量血壓。', consent:true},
+  {no:14, name:'示範夥伴 14', faces:['ai'],                   domains:['音樂藝文'],                  line:'幫品牌辦一場有溫度的小型音樂會。', consent:true},
+  {no:15, name:'示範夥伴 15', faces:['charity'],              domains:['弱勢就業'],                  line:'幫二度就業的媽媽，找到能兼顧家庭的工作。', consent:true},
+  {no:16, name:'示範夥伴 16', faces:[],                       domains:['數位轉型'],                  line:'把紙本訂單搬上雲端，老闆用手機就能看。', consent:true},
+  {no:17, name:'示範夥伴 17', faces:['ai','volunteer'],       domains:['搜尋行銷','在地行銷'],       line:'教店家自己經營 Google 商家，好評越來越多。', consent:true},
+  {no:18, name:'示範夥伴 18', faces:['charity'],              domains:['動物保護'],                  line:'幫流浪貓狗找到家，也幫中途之家募物資。', consent:true},
+  {no:19, name:'示範夥伴 19', faces:['charity'],              domains:['偏鄉教育'],                  line:'（還沒同意公開，這行不會出現在畫面上）', consent:false},
+  {no:20, name:'示範夥伴 20', faces:['rongtree'],             domains:['資本與商業模式'],            line:'看過上百份營運計畫書，幫你抓出最弱的那一頁。', consent:true},
+  {no:21, name:'示範夥伴 21', faces:['ai'],                   domains:['媒體曝光','音樂藝文'],       line:'幫你上 Podcast、上直播，讓更多人聽見你。', consent:true},
+  {no:22, name:'示範夥伴 22', faces:['volunteer'],            domains:['急難救助'],                  line:'颱風、地震過後，第一時間組物資車出發。', consent:true},
+  {no:23, name:'示範夥伴 23', faces:[],                       domains:['協會與政府補助'],            line:'熟悉商會與協會怎麼運作，幫你找到對的門。', consent:true},
+  {no:24, name:'示範夥伴 24', faces:['charity'],              domains:['身障支持'],                  line:'陪身障朋友練職場技能，也陪企業設計友善職缺。', consent:true},
+  {no:25, name:'示範夥伴 25', faces:['ai'],                   domains:['數位轉型'],                  line:'幫傳產工廠導入排程系統，交期不再靠喊。', consent:true},
+  {no:26, name:'示範夥伴 26', faces:['volunteer','rongtree'], domains:['社區營造'],                  line:'把老街的故事，做成一條可以走的導覽路線。', consent:true},
+  {no:27, name:'示範夥伴 27', faces:[],                       domains:['搜尋行銷'],                  line:'幫你寫官網文章，讓客戶搜尋時先看到你。', consent:true},
+  {no:28, name:'示範夥伴 28', faces:['charity'],              domains:['偏鄉教育','弱勢就業'],       line:'帶偏鄉青年學一技之長，畢業就有工作。', consent:true},
+  {no:29, name:'示範夥伴 29', faces:['ai'],                   domains:['資本與商業模式'],            line:'陪新創練募資簡報，十分鐘講出重點。', consent:true},
+  {no:30, name:'示範夥伴 30', faces:['volunteer'],            domains:['食物分享'],                  line:'週末到食物銀行幫忙分裝，一次備好 200 份。', consent:true},
+  {no:31, name:'示範夥伴 31', faces:['ai','charity'],         domains:['AI 落地','長者陪伴'],        line:'做給長輩用的 AI 語音小幫手，按一下就能說話。', consent:true},
+  {no:32, name:'示範夥伴 32', faces:[],                       domains:['媒體曝光'],                  line:'拍短影音，一支 60 秒把你的產品講清楚。', consent:true},
+  {no:33, name:'示範夥伴 33', faces:['volunteer'],            domains:['社區營造'],                  line:'（還沒同意公開，這行不會出現在畫面上）', consent:false},
+  {no:34, name:'示範夥伴 34', faces:['rongtree'],             domains:['環境永續'],                  line:'幫工廠算碳排，找出最省錢的減碳方法。', consent:true},
+  {no:35, name:'示範夥伴 35', faces:['volunteer'],            domains:['動物保護'],                  line:'假日帶狗狗做社會化訓練，提高認養機會。', consent:true},
+  {no:36, name:'示範夥伴 36', faces:['ai'],                   domains:['在地行銷'],                  line:'幫餐廳設計集點和回訪活動，熟客越來越多。', consent:true},
+  {no:37, name:'示範夥伴 37', faces:['charity'],              domains:['急難救助','社區營造'],       line:'平常培訓社區防災志工，災難來時就能自救互救。', consent:true},
+  {no:38, name:'示範夥伴 38', faces:[],                       domains:['音樂藝文'],                  line:'幫企業尾牙、記者會，找到對的表演團隊。', consent:true},
+  {no:39, name:'示範夥伴 39', faces:['ai'],                   domains:['協會與政府補助','AI 落地'],  line:'幫協會用 AI 整理會員資料，申請補助更快。', consent:true},
+  {no:40, name:'示範夥伴 40', faces:['charity','volunteer'],  domains:['身障支持'],                  line:'辦手作市集，讓身障夥伴的作品被買走。', consent:true}
+];
+const COUNTERS = {joined:40, goal:200, wishes:27, introductions:14};   // 示範數字
+const WISHES = [                    // 示範許願
+  {text:'想找短影音團隊，每個月幫我們拍 4 支產品介紹。',     from:'台中 ‧ 餐飲業',   date:'2026-10-15', matched:2},
+  {text:'想找 AI 導入顧問，幫 20 人的公司把報價流程自動化。', from:'新北 ‧ 製造業',   date:'2026-10-14', matched:1},
+  {text:'協會想申請政府補助，需要有人帶著寫計畫。',           from:'高雄 ‧ 社團協會', date:'2026-10-14', matched:0},
+  {text:'想找願意週末來陪長輩的志工，一個月兩次就好。',       from:'台南 ‧ 社福機構', date:'2026-10-13', matched:3},
+  {text:'尾牙想請一組小型樂團，預算有限但很有誠意。',         from:'桃園 ‧ 科技業',   date:'2026-10-12', matched:0}
+];
+const SHOWCASE = [1, 3, 32];        // 入選卡示範：挑 3 個不同領域的席次
+/* ================= 資料區結束 ================= */
+
+(()=>{
+  const $=id=>document.getElementById(id);
+  const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const pad3=n=>String(n).padStart(3,'0');
+  const norm=s=>String(s==null?'':s).toLowerCase().replace(/[\s‧・、，,。.]/g,'');
+  const num=n=>Number(n||0).toLocaleString('zh-TW');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DMAP=new Map(DOMAINS.map(d=>[d.name,d]));
+  const PUBLIC=ROSTER.filter(p=>p&&p.consent===true).sort((a,b)=>a.no-b.no);
+  const BYNO=new Map(PUBLIC.map(p=>[p.no,p]));
+  const facesOf=p=>(p.faces||[]).filter(f=>FACES[f]);
+  const faceTags=p=>{const fs=facesOf(p);
+    return fs.length?fs.map(f=>`<span class="ftag f-${f}">${esc(FACES[f].label)}</span>`).join(''):'<span class="ftag f-partner">我們的夥伴</span>'};
+  const okContact=v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)||/^[+\d][\d\s\-()]{7,}$/.test(v);
+
+  // 送出：DEMO 時一律不發請求；正式時照榮樹下「預約合作」的欄位打 /api/works/contact
+  async function send(item,name,contact,message,website){
+    if(DEMO)return 'demo';
+    const isMail=contact.includes('@');
+    try{
+      const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+        site:SITE,name,phone:isMail?'':contact,email:isMail?contact:'',item,message,website})});
+      return r.ok&&(await r.json()).ok===true?'sent':'fail';
+    }catch(_){return 'fail'}
+  }
+
+  /* ---------- 首屏：計數器 ---------- */
+  (function counters(){
+    const goal=Math.max(1,+COUNTERS.goal||0),joined=Math.max(0,+COUNTERS.joined||0);
+    $('c-demo').hidden=!DEMO;
+    $('c-goal').textContent=num(goal);
+    $('c-public').textContent=num(PUBLIC.length);
+    $('c-wishes').textContent=num(COUNTERS.wishes);$('w-count').textContent=num(COUNTERS.wishes);
+    $('c-intro').textContent=num(COUNTERS.introductions);$('w-intro').textContent=num(COUNTERS.introductions);
+    $('c-left').textContent=joined>=goal?'目標達成，謝謝每一位！':`還差 ${num(goal-joined)} 位，就到目標`;
+    const bar=$('c-bar');bar.setAttribute('aria-valuemax',goal);bar.setAttribute('aria-valuenow',joined);
+    bar.setAttribute('aria-valuetext',`已集結 ${joined} 位，目標 ${goal} 位`);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{bar.firstElementChild.style.width=Math.min(100,joined/goal*100)+'%'}));
+    const out=$('c-joined');
+    if(reduce)out.textContent=num(joined);
+    else{const t0=performance.now(),dur=1400;
+      const step=t=>{const k=Math.min(1,(t-t0)/dur);out.textContent=num(Math.round(joined*(1-Math.pow(1-k,3))));if(k<1)requestAnimationFrame(step)};
+      requestAnimationFrame(step);}
+    $('c-faces').innerHTML=Object.keys(FACES).map(k=>`<li><i class="dot f-${k}" aria-hidden="true"></i>${esc(FACES[k].label)} <b>${PUBLIC.filter(p=>facesOf(p).includes(k)).length}</b></li>`).join('');
+  })();
+
+  /* ---------- 找資源：搜尋＋換臉＋領域 ---------- */
+  const PAGE=6,st={q:'',face:'all',domain:'',shown:PAGE};
+  const hay=new WeakMap(PUBLIC.map(p=>[p,norm([p.name,`No.${pad3(p.no)}`,...(p.domains||[]),...(p.domains||[]).map(d=>(DMAP.get(d)||{}).need||''),
+    p.line,...facesOf(p).map(f=>FACES[f].label),facesOf(p).length?'':'我們的夥伴'].join(' '))]));
+  const okQ=p=>st.q.trim().split(/\s+/).map(norm).filter(Boolean).every(t=>hay.get(p).includes(t));
+  const okF=(p,f=st.face)=>f==='all'||facesOf(p).includes(f);
+  const okD=(p,d=st.domain)=>!d||(p.domains||[]).includes(d);
+
+  const facesEl=$('faces');
+  facesEl.innerHTML=[['all','全部'],...Object.keys(FACES).map(k=>[k,FACES[k].label])].map(([k,l])=>
+    `<button class="chip" type="button" data-face="${k}" aria-pressed="${k==='all'}">${k==='all'?'':`<i class="dot f-${k}" aria-hidden="true"></i>`}${esc(l)}<b></b></button>`).join('');
+  const groups=[['biz','做生意的難題','真 AI 導師席 8 大領域'],['good','做公益的需要','示範分類']];
+  $('domains').innerHTML=groups.map(([g,h,s])=>`<div class="dg"><p class="dg-h">${h}<span>${s}</span></p><div class="chips">`+
+    DOMAINS.filter(d=>d.group===g).map(d=>`<button class="chip" type="button" data-domain="${esc(d.name)}" aria-pressed="false" title="能幫你：${esc(d.need)}">${esc(d.name)}<b></b></button>`).join('')+'</div></div>').join('');
+  const domainBtns=[...document.querySelectorAll('#domains .chip')],faceBtns=[...facesEl.querySelectorAll('.chip')];
+
+  const card=p=>`<li><article class="pcard"><div class="pc-top"><span class="seatno">No.<b>${pad3(p.no)}</b></span>${p.no<=100?'<span>創始席</span>':''}</div>`+
+    `<h3>${esc(p.name)}</h3><p class="pc-dom">${esc((p.domains||[]).join(' ‧ '))}</p><p class="tags">${faceTags(p)}</p><p class="pc-line">${esc(p.line)}</p>`+
+    `<button class="btn btn-amber" type="button" data-intro="${p.no}">請大樹團隊幫我引薦</button></article></li>`;
+
+  function update(focusNew){
+    faceBtns.forEach(b=>{const k=b.dataset.face;b.setAttribute('aria-pressed',k===st.face);
+      b.querySelector('b').textContent=PUBLIC.filter(p=>okQ(p)&&okD(p)&&okF(p,k)).length;});
+    domainBtns.forEach(b=>{const d=b.dataset.domain,n=PUBLIC.filter(p=>okQ(p)&&okF(p)&&okD(p,d)).length;
+      b.setAttribute('aria-pressed',d===st.domain);b.querySelector('b').textContent=n;b.classList.toggle('zero',!n&&d!==st.domain);});
+    const list=PUBLIC.filter(p=>okQ(p)&&okF(p)&&okD(p)),prev=$('results').children.length;
+    $('results').innerHTML=list.slice(0,st.shown).map(card).join('');
+    $('r-count').innerHTML=`找到<b>${list.length}</b>位`+(st.face!=='all'?`　‧　${esc(FACES[st.face].label)}`:'')+(st.domain?`　‧　${esc(st.domain)}`:'')+(st.q.trim()?`　‧　「${esc(st.q.trim())}」`:'');
+    const left=list.length-st.shown,more=$('r-more');
+    more.hidden=left<=0;more.textContent=`再看 ${Math.min(PAGE,left)} 位（還有 ${left} 位）`;
+    $('r-empty').hidden=list.length>0;
+    $('r-clear').hidden=!(st.q.trim()||st.face!=='all'||st.domain);
+    const d=DMAP.get(st.domain),need=$('r-need');
+    need.hidden=!d;if(d)need.textContent=`「${d.name}」能幫你：${d.need}`;
+    if(focusNew){const b=$('results').children[prev];if(b)b.querySelector('button').focus();}
+  }
+  $('q').addEventListener('input',e=>{st.q=e.target.value;st.shown=PAGE;update()});
+  facesEl.addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;st.face=b.dataset.face;st.shown=PAGE;update()});
+  $('domains').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;st.domain=st.domain===b.dataset.domain?'':b.dataset.domain;st.shown=PAGE;update()});
+  $('r-more').addEventListener('click',()=>{st.shown+=PAGE;update(true)});
+  $('r-clear').addEventListener('click',()=>{st.q='';st.face='all';st.domain='';st.shown=PAGE;$('q').value='';update();$('q').focus()});
+  update();
+
+  /* ---------- 席次牆 No.001～No.100 ---------- */
+  (function wall(){
+    const all=new Map(ROSTER.filter(p=>p&&p.no>=1&&p.no<=100).map(p=>[p.no,p]));
+    let h='',taken=0;
+    for(let n=1;n<=100;n++){
+      const p=all.get(n),s=pad3(n);
+      if(p)taken++;
+      if(p&&p.consent===true){const d=(p.domains||[])[0]||'',short=(DMAP.get(d)||{}).short||'入席';
+        h+=`<li><button class="cell on" type="button" data-no="${n}" aria-haspopup="dialog" aria-label="No.${s} ${esc(p.name)}，${esc((p.domains||[]).join('、'))}，點開看他能幫什麼"><span class="n">${s}</span><span class="w">${esc(short)}</span></button></li>`;}
+      else if(p)h+=`<li><span class="cell held"><span class="n">${s}</span><span class="w" aria-hidden="true">保留</span><span class="sr">已入席，還沒公開</span></span></li>`;
+      else h+=`<li><a class="cell" href="#join" aria-label="No.${s} 等你，點一下加入"><span class="n">${s}</span><span class="w">等你</span></a></li>`;
+    }
+    $('seat-grid').innerHTML=h;
+    $('w-taken').textContent=taken;$('w-open').textContent=100-taken;
+    $('seat-grid').setAttribute('aria-label',`創始席 100 席，已入座 ${taken} 席`);
+  })();
+
+  /* ---------- 許願池 ---------- */
+  const wishLi=w=>{const d=/^\d{4}-(\d{2})-(\d{2})$/.exec(w.date||'');
+    return `<li class="wi"><p class="wi-t">${esc(w.text)}</p><p class="wi-m"><span>${esc(w.from)}</span>${d?`<span>${+d[1]}/${+d[2]}</span>`:''}`+
+      `<span class="st${w.matched>0?' ok':''}">${w.matched>0?`已牽線 ${+w.matched} 位`:'找人中'}</span></p></li>`};
+  $('wishes').innerHTML=WISHES.map(wishLi).join('');
+  $('wf').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const f=e.target,t=f.elements.text.value.trim(),err=$('w-err'),ok=$('w-ok');ok.textContent='';
+    if(t.length<4){err.textContent='請多寫幾個字，讓我們知道你要找什麼。';f.elements.text.focus();return}
+    err.textContent='';const btn=f.querySelector('button');btn.disabled=true;
+    const r=await send('許願池','許願池（未留名）','',`我想找：${t}`,f.elements.website.value);
+    btn.disabled=false;
+    if(r==='fail'){err.textContent='線上送出暫時沒成功，請稍後再試。';return}
+    const li=document.createElement('li');li.className='wi mine';
+    li.innerHTML=`<p class="wi-t">${esc(t)}</p><p class="wi-m"><span>剛剛</span><span class="st">${r==='demo'?'只有你看得到（示範）':'審核後公開'}</span></p>`;
+    $('wishes').prepend(li);f.elements.text.value='';
+    ok.textContent=r==='demo'?'已收到（示範）：設計稿不會真的送出，這則只有你看得到。':'已收到！大樹團隊看過後，會放進「大家在找什麼」。';
+  });
+
+  /* ---------- 入選卡 ---------- */
+  $('showcase').innerHTML=SHOWCASE.map(n=>BYNO.get(n)).filter(Boolean).map(p=>`<li>`+
+    `<article class="tcard" aria-label="入選卡：No.${pad3(p.no)} ${esc(p.name)}"><div class="tc-head"><span>${p.no<=100?'創始席':'大樹軍火庫'}</span><span class="seal" aria-hidden="true">庫</span></div>`+
+    `<div class="tc-mid"><p class="tc-kicker">我入選了大樹軍火庫</p><p class="tc-no"><span>No.</span>${pad3(p.no)}</p></div>`+
+    `<div><p class="tc-name">${esc(p.name)}</p><p class="tc-dom">${esc((p.domains||[]).join(' ‧ '))}</p><p class="tc-line">「${esc(p.line)}」</p></div>`+
+    `<p class="tc-foot">${DEMO?'示範卡 ‧ 設計稿':'大樹軍火庫'}</p></article>`+
+    `<button class="btn btn-ghost btn-block" type="button" data-share="${p.no}">分享這張卡</button><div class="share-msg" role="status"></div></li>`).join('');
+  $('showcase').addEventListener('click',async e=>{
+    const b=e.target.closest('[data-share]');if(!b)return;
+    const p=BYNO.get(+b.dataset.share),msg=b.nextElementSibling;if(!p)return;
+    const url=location.href.split('#')[0]+'#seat-'+pad3(p.no),title=`我入選了大樹軍火庫 No.${pad3(p.no)}`;
+    if(navigator.share){
+      try{await navigator.share({title,text:`${title}｜${p.name}：${p.line}`,url});msg.textContent='已打開分享選單。';return}
+      catch(x){if(x&&x.name==='AbortError'){msg.textContent='已取消分享。';return}}
+    }
+    try{await navigator.clipboard.writeText(url);msg.textContent='網址已複製，貼到 LINE 或 FB 就能分享。';return}catch(_){}
+    msg.innerHTML=`這台裝置沒辦法自動分享，請長按下面的網址複製：<input class="share-url" readonly value="${esc(url)}" aria-label="這張卡的網址">`;
+    const inp=msg.querySelector('input');inp.focus();inp.select();
+  });
+
+  /* ---------- 彈窗：人物卡、引薦請求 ---------- */
+  const dlg=$('dlg'),body=$('dlg-body');
+  const showDlg=()=>{if(typeof dlg.showModal!=='function')return false;if(!dlg.open)dlg.showModal();dlg.scrollTop=0;return true};
+  function openPerson(no){
+    const p=BYNO.get(no);if(!p)return;
+    body.innerHTML=`<p class="eyebrow">No.${pad3(p.no)}${p.no<=100?' ‧ 創始席':''}</p><h3 id="dlg-h">${esc(p.name)}</h3><p class="tags">${faceTags(p)}</p>`+
+      `<ul class="can">${(p.domains||[]).map(d=>`<li><b>${esc(d)}</b>能幫你：${esc((DMAP.get(d)||{}).need||d)}</li>`).join('')}</ul>`+
+      (p.line?`<p class="say">「${esc(p.line)}」</p>`:'')+
+      (/^https:\/\//.test(p.link||'')?`<a class="ext" href="${esc(p.link)}" target="_blank" rel="noopener">看他的公開頁面 ↗</a>`:'')+
+      `<button class="btn btn-amber btn-block" type="button" data-intro="${p.no}">請大樹團隊幫我引薦</button><p class="fine">我們會先問過他，雙方都同意，才交換聯絡方式。</p>`;
+    showDlg();
+  }
+  function openIntro(no){
+    const p=BYNO.get(no);if(!p)return;
+    body.innerHTML=`<p class="eyebrow">請大樹團隊幫我引薦</p><h3 id="dlg-h">想認識 No.${pad3(p.no)}<br>${esc(p.name)}</h3>`+
+      `<p class="lead">留下你的聯絡方式，大樹團隊會先問過他，雙方都同意就幫你牽線。我們不會直接把他的電話給你，也不會直接把你的電話給他。</p>`+
+      `<form id="if" novalidate><div class="errsum" id="i-errsum" role="alert" tabindex="-1"></div>`+
+      `<div class="field"><label for="i-name">你的稱呼 <span class="req">*</span></label><input id="i-name" name="name" autocomplete="name"></div>`+
+      `<div class="field"><label for="i-contact">電話或 Email <span class="req">*</span> <span class="opt">（只給大樹團隊）</span></label><input id="i-contact" name="contact" autocomplete="email"></div>`+
+      `<div class="field"><label for="i-msg">想請他幫什麼 <span class="opt">（可不填）</span></label><textarea id="i-msg" name="msg" placeholder="例：想請他看看我們的官網，怎麼讓客戶搜得到"></textarea></div>`+
+      `<input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">`+
+      `<button class="btn btn-amber btn-block" type="submit">送出引薦請求 <span class="arr" aria-hidden="true">→</span></button>`+
+      (DEMO?'<p class="fine">設計稿：按下去只會顯示「已收到（示範）」，不會真的送出。</p>':'')+`</form>`;
+    if(!showDlg())return;
+    const f=$('if');$('i-name').focus();
+    f.addEventListener('submit',async e=>{
+      e.preventDefault();
+      const el=f.elements,name=el.name.value.trim(),c=el.contact.value.trim(),errs=[],sum=$('i-errsum');
+      if(!name)errs.push('請留下你的稱呼');
+      if(!c)errs.push('請留下電話或 Email');else if(!okContact(c))errs.push('請輸入有效的電話號碼或 Email');
+      if(errs.length){sum.innerHTML=`<strong>還有 ${errs.length} 個地方要補上：</strong><ul>${errs.map(m=>`<li>${m}</li>`).join('')}</ul>`;sum.classList.add('show');sum.focus();return}
+      const btn=f.querySelector('button[type=submit]');btn.disabled=true;
+      const r=await send('引薦請求',name,c,`想認識：No.${pad3(p.no)} ${p.name}`+(el.msg.value.trim()?`\n想請他幫：${el.msg.value.trim()}`:''),el.website.value);
+      btn.disabled=false;
+      if(r==='fail'){sum.textContent='線上送出暫時沒成功，請稍後再試，或加榮樹下官方 LINE@ 告訴我們。';sum.classList.add('show');sum.focus();return}
+      body.innerHTML=`<p class="eyebrow">${r==='demo'?'已收到（示範）':'已送出'}</p><h3 id="dlg-h" tabindex="-1">好，我們來牽線。</h3>`+
+        `<p class="lead">${r==='demo'?'這是設計稿，資料沒有真的送出。正式上線後，':''}大樹團隊會先問過 ${esc(p.name)}，雙方都同意，就幫你們介紹。</p>`+
+        `<button class="btn btn-ghost" type="button" data-close>關閉</button>`;
+      $('dlg-h').focus();
+    });
+  }
+  document.addEventListener('click',e=>{
+    const i=e.target.closest('[data-intro]');if(i){openIntro(+i.dataset.intro);return}
+    const c=e.target.closest('#seat-grid button.cell');if(c){openPerson(+c.dataset.no);return}
+    if(e.target.closest('[data-close],.dlg-x')||e.target===dlg)dlg.close();
+  });
+  dlg.addEventListener('close',()=>{if(/^#seat-/.test(location.hash))history.replaceState(null,'',location.pathname+location.search)});
+  // 分享出去的網址 …#seat-001：打開就跳到那一位的卡
+  const fromHash=()=>{const m=/^#seat-(\d{1,4})$/.exec(location.hash);if(m&&BYNO.has(+m[1])){$('wall').scrollIntoView({behavior:'instant'});openPerson(+m[1])}};
+  addEventListener('hashchange',fromHash);fromHash();
+
+  /* ---------- 加入區：我也想被看見 ---------- */
+  const jf=$('jf'),jsum=$('j-errsum'),jdone=$('j-done');
+  $('j-domain').innerHTML='<option value="">請選一個最拿手的</option>'+
+    groups.map(([g,h])=>`<optgroup label="${h}">`+DOMAINS.filter(d=>d.group===g).map(d=>`<option>${esc(d.name)}</option>`).join('')+'</optgroup>').join('')+
+    '<option value="其他">其他（寫在一句話裡）</option>';
+  $('j-note').textContent=DEMO?'設計稿：按下去只會顯示「已收到（示範）」，不會真的送出。':'送出後大樹團隊會直接收到，確認後跟你聯絡。';
+  jf.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const v=n=>jf.elements[n].value.trim(),errs=[];
+    if(!v('name'))errs.push(['j-name','請填姓名或品牌名']);
+    if(!v('domain'))errs.push(['j-domain','請選一個最拿手的領域']);
+    if(!v('line'))errs.push(['j-line','請用一句話說你能幫什麼']);
+    if(v('link')&&!/^https?:\/\/\S+\.\S+/.test(v('link')))errs.push(['j-link','連結請用 https:// 開頭']);
+    if(!v('contact'))errs.push(['j-contact','請留下電話或 Email']);else if(!okContact(v('contact')))errs.push(['j-contact','請輸入有效的電話號碼或 Email']);
+    if(!jf.elements.consent.checked)errs.push(['j-consent','請勾選「我同意上架」']);
+    if(errs.length){jsum.innerHTML=`<strong>還有 ${errs.length} 個地方要補上：</strong><ul>${errs.map(([id,m])=>`<li><a href="#${id}">${m}</a></li>`).join('')}</ul>`;jsum.classList.add('show');jsum.focus();return}
+    jsum.classList.remove('show');
+    const btn=jf.querySelector('button[type=submit]');btn.disabled=true;
+    const r=await send('我也想被看見',v('name'),v('contact'),`領域：${v('domain')}\n一句話：${v('line')}`+(v('link')?`\n公開連結：${v('link')}`:'')+'\n同意上架：是',jf.elements.website.value);
+    btn.disabled=false;
+    if(r==='fail'){jsum.textContent='線上送出暫時沒成功，請稍後再試，或加榮樹下官方 LINE@ 告訴我們。';jsum.classList.add('show');jsum.focus();return}
+    $('j-done-eye').textContent=r==='demo'?'已收到（示範）':'已送出';
+    $('j-done-txt').textContent=(r==='demo'?'這是設計稿，資料沒有真的送出。正式上線後：':'')+'大樹團隊看過之後會跟你確認，你按下「我同意上架」，就會拿到席次編號和入選卡。';
+    jf.hidden=true;jdone.classList.add('show');jdone.focus();
+  });
+  $('j-again').addEventListener('click',()=>{jdone.classList.remove('show');jf.hidden=false;jf.reset();$('j-name').focus()});
+})();
+</script>
+</body>
+</html>
