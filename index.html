@@ -778,7 +778,7 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
     <h3 class="sub-h rv">接下來的訪談</h3>
     <ul class="slots" id="prep-slots" aria-live="polite"><li><span class="who none">讀取中…</span></li></ul>
     <h3 class="sub-h rv">還有空檔的時間</h3>
-    <p class="lead open-hint">下面是整段有空的時間。點右邊的「我要預約」，會帶您到上方的預約表單，選想要的那一個小時（一場一小時，前後場會留 30 分鐘緩衝），留下姓名與聯絡方式就能送出。</p>
+    <p class="lead open-hint">下面是整段有空的時間。點右邊的「我要預約」，會帶您到上方的預約表單，選想要的那一個小時（一場一小時，前後場會留 30 分鐘緩衝），留下姓名與聯絡方式送出，那一小時就會先幫您保留，等教練確認。</p>
     <ul class="slots open" id="prep-open" aria-live="polite"><li><span class="who none">讀取中…</span></li></ul>
     <h3 class="sub-h rv">已交資料的來賓</h3>
     <ul class="guests" id="prep-guests" aria-live="polite"></ul>
@@ -837,11 +837,14 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
     const days=[...new Set((wins||[]).map(w=>w.date))];
     wd.innerHTML='<option value="">先不選，請你們再與我約時間</option>'+days.map(d=>`<option value="${d}">${dlabel(d)}</option>`).join('');
     wd.disabled=!days.length;fillTimes('');
-    wnote.textContent=wins===undefined?'正在讀取可預約的時間…':days.length?'選您想要的那一個小時，一場一小時；前後場會留 30 分鐘緩衝。不選也可以，我們再與您約。':(wins===null?'暫時讀不到可預約的時間，留下聯絡方式，我們會再與您約時間。':'這幾天晚上都排滿了，留下聯絡方式，我們會再與您約時間。');
+    wnote.textContent=wins===undefined?'正在讀取可預約的時間…':days.length?'選您想要的那一個小時（一場一小時；前後場會留 30 分鐘緩衝），送出後會先幫您保留，等教練確認。不選也可以，我們再與您約。':(wins===null?'暫時讀不到可預約的時間，留下聯絡方式，我們會再與您約時間。':'這幾天晚上都排滿了，留下聯絡方式，我們會再與您約時間。');
   }
   const syncWhen=()=>{const c=f.querySelector('input[name=intent]:checked');wrap.hidden=!(c&&c.value==='節目專訪')};
   wd.addEventListener('change',()=>fillTimes(wd.value));
-  document.addEventListener('rt-open',e=>{wins=e.detail;fillDays()});
+  document.addEventListener('rt-open',e=>{
+    const keepD=wd.value,keepT=wt.value;wins=e.detail;fillDays();
+    if(keepD&&[...wd.options].some(o=>o.value===keepD)){wd.value=keepD;fillTimes(keepD,keepT)}
+  });
   document.addEventListener('rt-pick',e=>{
     f.querySelector('input[name=intent][value="節目專訪"]').checked=true;
     document.getElementById('intent-err').textContent='';syncWhen();
@@ -866,8 +869,23 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
     // 2026-10-13：資料直接送進「活動報名即時通知」群（大樹作品通用接口），送不出去才退回「複製貼到 LINE@」
     const btn=f.querySelector('button[type=submit]');btn.disabled=true;
     const c=f.contact.value.trim(),isMail=c.includes('@');
-    let sent=false;
-    try{
+    // 2026-10-23 教練：選了時間就先把那一小時占成「待確認」（/api/rongtree/hold）；搶不到才請對方改選，其他狀況退回一般留資料
+    let held=false,heldLabel='';
+    if(whenText){
+      try{
+        const r=await fetch('/api/rongtree/hold',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          date:wd.value,start:wt.value,name:f.who.value.trim(),org:f.org.value.trim(),contact:c,msg:f.msg.value.trim(),website:f.website.value})});
+        const j=await r.json().catch(()=>({}));
+        if(r.ok&&j.ok===true&&j.held){held=true;heldLabel=j.label||whenText}
+        else if(r.status===409&&j.code==='taken'){
+          btn.disabled=false;
+          sum.innerHTML='<strong>'+(j.error||'這個時段剛剛被預約走了')+'</strong><br>空檔清單已更新，請改選別的時間再送出。';
+          sum.classList.add('show');sum.focus();document.dispatchEvent(new Event('rt-reload'));return;
+        }
+      }catch(_){}
+    }
+    let sent=held;
+    if(!held)try{
       const r=await fetch('/api/works/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
         site:'rongtree',name:f.who.value.trim(),phone:isMail?'':c,email:isMail?c:'',item:intent.value,
         message:`企業／單位：${f.org.value.trim()}`+(whenText?`\n想預約的時間：${whenText}`:'')+(f.msg.value.trim()?`\n想說的話：${f.msg.value.trim()}`:''),website:f.website.value})});
@@ -876,9 +894,10 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
     btn.disabled=false;
     const pre=document.getElementById('summary');
     if(sent){
-      document.getElementById('done-eyebrow').textContent='已送出';
-      document.getElementById('copied').textContent='我們已經收到你的申請，會盡快與你聯絡。想先聊聊，也可以直接加榮樹下官方 LINE@。';
+      document.getElementById('done-eyebrow').textContent=held?'已保留':'已送出';
+      document.getElementById('copied').textContent=held?`已幫你先保留 ${heldLabel}，教練確認後會盡快與你聯絡。想先聊聊，也可以直接加榮樹下官方 LINE@。`:'我們已經收到你的申請，會盡快與你聯絡。想先聊聊，也可以直接加榮樹下官方 LINE@。';
       pre.textContent='';pre.hidden=true;
+      if(held)document.dispatchEvent(new Event('rt-reload'));
     }else{
       pre.hidden=false;pre.textContent=text;
       let ok=false;try{await navigator.clipboard.writeText(text);ok=true}catch(_){}
@@ -898,7 +917,7 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
   const day=(d,s,e)=>{const x=new Date(d+'T00:00:00+08:00');return `${x.getMonth()+1}/${x.getDate()}（${'日一二三四五六'[x.getDay()]}）<small>${s}${e?'–'+e:''}</small>`;};
   open.addEventListener('click',e=>{const a=e.target.closest('a.book');if(!a)return;e.preventDefault();
     document.dispatchEvent(new CustomEvent('rt-pick',{detail:{d:a.dataset.d,a:a.dataset.a}}))});
-  fetch('/api/rongtree/prep',{cache:'no-store'}).then(r=>r.json()).then(d=>{
+  const load=()=>fetch('/api/rongtree/prep',{cache:'no-store'}).then(r=>r.json()).then(d=>{
     const up=d.upcoming||[];
     slots.innerHTML=up.length?up.map(u=>`<li><span class="when">${day(u.date,u.start,u.end)}</span>`+
       `<span class="who"><span class="fld">嘉賓：${u.guest?esc(u.guest):'待確認'}${u.tentative?'（時間待確認）':''}</span>`+
@@ -917,6 +936,7 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
       (x.date?`<span class="d">訪談 ${day(x.date,x.start,'').replace(/<\/?small>/g,' ')}</span>`:'')+`</div></li>`).join('');
     empty.hidden=g.length>0;
   }).catch(()=>{slots.innerHTML='<li><span class="who none">暫時讀不到訪談清單，請稍後再試。</span></li>';open.innerHTML='';document.dispatchEvent(new CustomEvent('rt-open',{detail:null}))});
+  document.addEventListener('rt-reload',load);load();
 })();
 </script>
 <script>
