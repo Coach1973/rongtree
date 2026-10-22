@@ -759,6 +759,9 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
     </div>
     <h3 class="sub-h rv">接下來的訪談</h3>
     <ul class="slots" id="prep-slots" aria-live="polite"><li><span class="who none">讀取中…</span></li></ul>
+    <h3 class="sub-h rv">還有空檔的時間</h3>
+    <p class="lead open-hint">下面是整段有空的時間。預約時告訴我們您想要的那一個小時（例如 19:30–20:30），一場一小時，前後場會留 30 分鐘緩衝。</p>
+    <ul class="slots open" id="prep-open" aria-live="polite"><li><span class="who none">讀取中…</span></li></ul>
     <h3 class="sub-h rv">已交資料的來賓</h3>
     <ul class="guests" id="prep-guests" aria-live="polite"></ul>
     <p class="empty" id="prep-guests-empty" hidden>還沒有來賓交回資料，第一位會出現在這裡。</p>
@@ -841,22 +844,25 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
 <script>
 /* 訪談嘉賓前置作業：讀 /api/rongtree/prep（行程表裡接下來的榮樹下訪談＋已交資料的來賓，只含公開欄位） */
 (()=>{
-  const slots=document.getElementById('prep-slots'),guests=document.getElementById('prep-guests'),empty=document.getElementById('prep-guests-empty');
+  const slots=document.getElementById('prep-slots'),open=document.getElementById('prep-open'),guests=document.getElementById('prep-guests'),empty=document.getElementById('prep-guests-empty');
   const esc=t=>String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const day=(d,s,e)=>{const x=new Date(d+'T00:00:00+08:00');return `${x.getMonth()+1}/${x.getDate()}（${'日一二三四五六'[x.getDay()]}）<small>${s}${e?'–'+e:''}</small>`;};
   fetch('/api/rongtree/prep',{cache:'no-store'}).then(r=>r.json()).then(d=>{
     const up=d.upcoming||[];
     slots.innerHTML=up.length?up.map(u=>`<li><span class="when">${day(u.date,u.start,u.end)}</span>`+
-      `<span class="who${u.guest?'':' none'}">${u.guest?esc(u.guest):'來賓邀請中'}${u.tentative?'（時間待確認）':''}</span>`+
+      `<span class="who${u.guest?'':' none'}">${u.guest?esc(u.guest):`邀約人：${esc(u.booked_by)}（來賓待確認）`}${u.tentative?'（時間待確認）':''}</span>`+
       (u.form?(u.submitted?`<a class="ok" href="${esc(u.form)}" target="_blank" rel="noopener">✓ 已交資料${u.count>1?`（${u.count} 位）`:''}　修改或新增</a>`
                          :`<a class="go" href="${esc(u.form)}" target="_blank" rel="noopener">填寫來賓資料表 →</a>`):'<span></span>')+`</li>`).join('')
       :'<li><span class="who none">接下來兩個月還沒有排定的訪談。</span></li>';
+    const op=d.open||[];
+    open.innerHTML=op.length?op.map(o=>`<li><span class="when">${day(o.date,'','')}</span><span class="who">晚上 ${esc(o.start)}–${esc(o.end)} 有空檔</span><span></span></li>`).join('')
+      :'<li><span class="who none">這幾天晚上都排滿了。</span></li>';
     const g=d.guests||[];
     guests.innerHTML=g.map(x=>`<li>${x.photo?`<img class="ph" src="${esc(x.photo)}" alt="${esc(x.name)}" loading="lazy">`:`<span class="ph" aria-hidden="true">${esc((x.name||'?').slice(0,1))}</span>`}`+
       `<div><b>${esc(x.name)}</b><span class="t">${esc(x.title)}</span>${x.line?`<p>${esc(x.line)}</p>`:''}`+
       (x.date?`<span class="d">訪談 ${day(x.date,x.start,'').replace(/<\/?small>/g,' ')}</span>`:'')+`</div></li>`).join('');
     empty.hidden=g.length>0;
-  }).catch(()=>{slots.innerHTML='<li><span class="who none">暫時讀不到訪談清單，請稍後再試。</span></li>'});
+  }).catch(()=>{slots.innerHTML='<li><span class="who none">暫時讀不到訪談清單，請稍後再試。</span></li>';open.innerHTML=''});
 })();
 </script>
 <script>
