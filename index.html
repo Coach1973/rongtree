@@ -354,6 +354,7 @@ legend,.lbl{font:500 20px/1.4 var(--sans);letter-spacing:.1em;color:var(--on-ink
 .slots .when{font-weight:700;font-variant-numeric:tabular-nums}
 .slots .when small{display:block;font-weight:400;color:var(--on-paper-mute);font-size:20px}
 .slots .who{color:var(--on-paper)}.slots .who.none{color:var(--on-paper-mute)}
+.slots .who .fld{display:block}.slots .who .fld.inv{color:var(--on-paper-mute)}
 .slots a{text-decoration:none;white-space:nowrap}
 .slots a.go{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;border-radius:999px;background:var(--amber);color:#1a1206;font-weight:500}
 .slots a.go:hover{background:var(--amber-hi)}
@@ -850,7 +851,8 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
   fetch('/api/rongtree/prep',{cache:'no-store'}).then(r=>r.json()).then(d=>{
     const up=d.upcoming||[];
     slots.innerHTML=up.length?up.map(u=>`<li><span class="when">${day(u.date,u.start,u.end)}</span>`+
-      `<span class="who${u.guest?'':' none'}">${u.guest?esc(u.guest):`邀約人：${esc(u.booked_by)}（來賓待確認）`}${u.tentative?'（時間待確認）':''}</span>`+
+      `<span class="who"><span class="fld">嘉賓：${u.guest?esc(u.guest):'待確認'}${u.tentative?'（時間待確認）':''}</span>`+
+      `${u.booked_by?`<span class="fld inv">邀請人：${esc(u.booked_by)}</span>`:''}</span>`+
       (u.form?(u.submitted?`<a class="ok" href="${esc(u.form)}" target="_blank" rel="noopener">✓ 已交資料${u.count>1?`（${u.count} 位）`:''}　修改或新增</a>`
                          :`<a class="go" href="${esc(u.form)}" target="_blank" rel="noopener">填寫來賓資料表 →</a>`):'<span></span>')+`</li>`).join('')
       :'<li><span class="who none">接下來兩個月還沒有排定的訪談。</span></li>';
