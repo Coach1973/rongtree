@@ -329,6 +329,15 @@ legend,.lbl{font:500 20px/1.4 var(--sans);letter-spacing:.1em;color:var(--on-ink
 .field input,.field textarea{font:400 20px/1.5 var(--sans);min-height:56px;color:var(--on-ink);background:rgba(239,230,210,.04);border:1px solid rgba(239,230,210,.22);border-radius:var(--r);padding:12px 14px;min-height:48px;transition:border-color .2s,background .2s}
 .field textarea{min-height:110px;resize:vertical}
 .field input:focus,.field textarea:focus{outline:none;border-color:var(--amber);background:rgba(239,230,210,.07)}
+.field select{font:400 20px/1.5 var(--sans);min-height:56px;color:var(--on-ink);background:rgba(239,230,210,.04);border:1px solid rgba(239,230,210,.22);border-radius:var(--r);padding:12px 14px;transition:border-color .2s,background .2s}
+.field select:focus{outline:none;border-color:var(--amber);background:rgba(239,230,210,.07)}
+.field select:disabled{opacity:.6}
+.field select option{background:var(--ink-2);color:var(--on-ink)}
+.when-wrap{margin:0 0 26px}
+.when-wrap[hidden]{display:none}
+.when-wrap .row{margin-bottom:0}
+.when-wrap .pick-note{font-size:20px;color:var(--on-ink-mute);margin:0 0 14px}
+#f{scroll-margin-top:96px}
 .field input:user-invalid{border-color:#e48a6e}
 .err{font-size:20px;color:#f0a58c;margin-top:6px;min-height:0}
 .field .err:empty{display:none}
@@ -717,6 +726,14 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
           </div>
           <p class="err" id="intent-err"></p>
         </fieldset>
+        <div class="when-wrap" id="when-wrap" hidden>
+          <p class="lbl">想預約的時間</p>
+          <p class="pick-note" id="when-note">正在讀取可預約的時間…</p>
+          <div class="row">
+            <div class="field"><label for="when-d">哪一天</label><select id="when-d" name="when_d"></select></div>
+            <div class="field"><label for="when-t">哪一個小時</label><select id="when-t" name="when_t"></select></div>
+          </div>
+        </div>
         <div class="row">
           <div class="field"><label for="org">企業／單位名稱 <span class="req">*</span></label><input id="org" name="org" required autocomplete="organization" aria-describedby="org-err"><p class="err" id="org-err"></p></div>
           <div class="field"><label for="who">聯絡人與職稱 <span class="req">*</span></label><input id="who" name="who" required autocomplete="name" placeholder="例：王小明 總經理" aria-describedby="who-err"><p class="err" id="who-err"></p></div>
@@ -761,7 +778,7 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
     <h3 class="sub-h rv">接下來的訪談</h3>
     <ul class="slots" id="prep-slots" aria-live="polite"><li><span class="who none">讀取中…</span></li></ul>
     <h3 class="sub-h rv">還有空檔的時間</h3>
-    <p class="lead open-hint">下面是整段有空的時間。預約時告訴我們您想要的那一個小時（例如 19:30–20:30），一場一小時，前後場會留 30 分鐘緩衝。</p>
+    <p class="lead open-hint">下面是整段有空的時間。點右邊的「我要預約」，會帶您到上方的預約表單，選想要的那一個小時（一場一小時，前後場會留 30 分鐘緩衝），留下姓名與聯絡方式就能送出。</p>
     <ul class="slots open" id="prep-open" aria-live="polite"><li><span class="who none">讀取中…</span></li></ul>
     <h3 class="sub-h rv">已交資料的來賓</h3>
     <ul class="guests" id="prep-guests" aria-live="polite"></ul>
@@ -802,7 +819,37 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
   ['org','who','contact'].forEach(n=>{const el=f.elements[n];
     el.addEventListener('blur',()=>{if(el.value)check(n)});
     el.addEventListener('input',()=>{if(el.getAttribute('aria-invalid')==='true')check(n)});});
-  f.addEventListener('change',e=>{if(e.target.name==='intent')document.getElementById('intent-err').textContent=''});
+  // 預約時間：選「節目專訪」才出現；空檔清單（/api/rongtree/prep）載入後填進來，清單裡的「我要預約」會帶日期與起點過來
+  const wrap=document.getElementById('when-wrap'),wd=document.getElementById('when-d'),wt=document.getElementById('when-t'),wnote=document.getElementById('when-note');
+  let wins;
+  const mm=s=>{const [h,m]=s.split(':').map(Number);return h*60+m};
+  const hm=n=>String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0');
+  const dlabel=d=>{const x=new Date(d+'T00:00:00+08:00');return `${x.getMonth()+1}/${x.getDate()}（${'日一二三四五六'[x.getDay()]}）`};
+  function fillTimes(d,first){
+    const starts=[];
+    (wins||[]).filter(w=>w.date===d).forEach(w=>{for(let t=mm(w.start);t+60<=mm(w.end);t+=30)if(!starts.includes(t))starts.push(t)});
+    starts.sort((a,b)=>a-b);
+    wt.innerHTML=d&&starts.length?starts.map(t=>`<option value="${hm(t)}">${hm(t)}–${hm(t+60)}</option>`).join(''):'<option value="">請先選哪一天</option>';
+    wt.disabled=!(d&&starts.length);
+    if(first&&starts.includes(mm(first)))wt.value=first;
+  }
+  function fillDays(){
+    const days=[...new Set((wins||[]).map(w=>w.date))];
+    wd.innerHTML='<option value="">先不選，請你們再與我約時間</option>'+days.map(d=>`<option value="${d}">${dlabel(d)}</option>`).join('');
+    wd.disabled=!days.length;fillTimes('');
+    wnote.textContent=wins===undefined?'正在讀取可預約的時間…':days.length?'選您想要的那一個小時，一場一小時；前後場會留 30 分鐘緩衝。不選也可以，我們再與您約。':(wins===null?'暫時讀不到可預約的時間，留下聯絡方式，我們會再與您約時間。':'這幾天晚上都排滿了，留下聯絡方式，我們會再與您約時間。');
+  }
+  const syncWhen=()=>{const c=f.querySelector('input[name=intent]:checked');wrap.hidden=!(c&&c.value==='節目專訪')};
+  wd.addEventListener('change',()=>fillTimes(wd.value));
+  document.addEventListener('rt-open',e=>{wins=e.detail;fillDays()});
+  document.addEventListener('rt-pick',e=>{
+    f.querySelector('input[name=intent][value="節目專訪"]').checked=true;
+    document.getElementById('intent-err').textContent='';syncWhen();
+    wd.value=e.detail.d;fillTimes(e.detail.d,e.detail.a);
+    f.scrollIntoView({block:'start'});setTimeout(()=>wt.focus({preventScroll:true}),500);
+  });
+  fillDays();
+  f.addEventListener('change',e=>{if(e.target.name==='intent'){document.getElementById('intent-err').textContent='';syncWhen()}});
   f.addEventListener('submit',async e=>{
     e.preventDefault();
     const errs=[];
@@ -814,7 +861,8 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
       sum.classList.add('show');sum.focus();return;
     }
     sum.classList.remove('show');
-    const text=`【榮樹下 申請】\n合作意向：${intent.value}\n企業／單位：${f.org.value.trim()}\n聯絡人：${f.who.value.trim()}\n聯絡方式：${f.contact.value.trim()}`+(f.msg.value.trim()?`\n想說的話：${f.msg.value.trim()}`:'');
+    const whenText=(!wrap.hidden&&wd.value&&wt.value)?`${dlabel(wd.value)} ${wt.value}–${hm(mm(wt.value)+60)}`:'';
+    const text=`【榮樹下 申請】\n合作意向：${intent.value}\n企業／單位：${f.org.value.trim()}\n聯絡人：${f.who.value.trim()}\n聯絡方式：${f.contact.value.trim()}`+(whenText?`\n想預約的時間：${whenText}`:'')+(f.msg.value.trim()?`\n想說的話：${f.msg.value.trim()}`:'');
     // 2026-10-13：資料直接送進「活動報名即時通知」群（大樹作品通用接口），送不出去才退回「複製貼到 LINE@」
     const btn=f.querySelector('button[type=submit]');btn.disabled=true;
     const c=f.contact.value.trim(),isMail=c.includes('@');
@@ -822,7 +870,7 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
     try{
       const r=await fetch('/api/works/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
         site:'rongtree',name:f.who.value.trim(),phone:isMail?'':c,email:isMail?c:'',item:intent.value,
-        message:`企業／單位：${f.org.value.trim()}`+(f.msg.value.trim()?`\n想說的話：${f.msg.value.trim()}`:''),website:f.website.value})});
+        message:`企業／單位：${f.org.value.trim()}`+(whenText?`\n想預約的時間：${whenText}`:'')+(f.msg.value.trim()?`\n想說的話：${f.msg.value.trim()}`:''),website:f.website.value})});
       sent=r.ok&&(await r.json()).ok===true;
     }catch(_){}
     btn.disabled=false;
@@ -848,6 +896,8 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
   const slots=document.getElementById('prep-slots'),open=document.getElementById('prep-open'),guests=document.getElementById('prep-guests'),empty=document.getElementById('prep-guests-empty');
   const esc=t=>String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const day=(d,s,e)=>{const x=new Date(d+'T00:00:00+08:00');return `${x.getMonth()+1}/${x.getDate()}（${'日一二三四五六'[x.getDay()]}）<small>${s}${e?'–'+e:''}</small>`;};
+  open.addEventListener('click',e=>{const a=e.target.closest('a.book');if(!a)return;e.preventDefault();
+    document.dispatchEvent(new CustomEvent('rt-pick',{detail:{d:a.dataset.d,a:a.dataset.a}}))});
   fetch('/api/rongtree/prep',{cache:'no-store'}).then(r=>r.json()).then(d=>{
     const up=d.upcoming||[];
     slots.innerHTML=up.length?up.map(u=>`<li><span class="when">${day(u.date,u.start,u.end)}</span>`+
@@ -857,14 +907,16 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
                          :`<a class="go" href="${esc(u.form)}" target="_blank" rel="noopener">填寫來賓資料表 →</a>`):'<span></span>')+`</li>`).join('')
       :'<li><span class="who none">接下來兩個月還沒有排定的訪談。</span></li>';
     const op=d.open||[];
-    open.innerHTML=op.length?op.map(o=>`<li><span class="when">${day(o.date,'','')}</span><span class="who">晚上 ${esc(o.start)}–${esc(o.end)} 有空檔</span><span></span></li>`).join('')
+    open.innerHTML=op.length?op.map(o=>`<li><span class="when">${day(o.date,'','')}</span><span class="who">晚上 ${esc(o.start)}–${esc(o.end)} 有空檔</span>`+
+      `<a class="go book" href="#join" data-d="${esc(o.date)}" data-a="${esc(o.start)}">我要預約 <span aria-hidden="true">→</span></a></li>`).join('')
       :'<li><span class="who none">這幾天晚上都排滿了。</span></li>';
+    document.dispatchEvent(new CustomEvent('rt-open',{detail:op}));
     const g=d.guests||[];
     guests.innerHTML=g.map(x=>`<li>${x.photo?`<img class="ph" src="${esc(x.photo)}" alt="${esc(x.name)}" loading="lazy">`:`<span class="ph" aria-hidden="true">${esc((x.name||'?').slice(0,1))}</span>`}`+
       `<div><b>${esc(x.name)}</b><span class="t">${esc(x.title)}</span>${x.line?`<p>${esc(x.line)}</p>`:''}`+
       (x.date?`<span class="d">訪談 ${day(x.date,x.start,'').replace(/<\/?small>/g,' ')}</span>`:'')+`</div></li>`).join('');
     empty.hidden=g.length>0;
-  }).catch(()=>{slots.innerHTML='<li><span class="who none">暫時讀不到訪談清單，請稍後再試。</span></li>';open.innerHTML=''});
+  }).catch(()=>{slots.innerHTML='<li><span class="who none">暫時讀不到訪談清單，請稍後再試。</span></li>';open.innerHTML='';document.dispatchEvent(new CustomEvent('rt-open',{detail:null}))});
 })();
 </script>
 <script>
