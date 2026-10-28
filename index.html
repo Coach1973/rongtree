@@ -997,7 +997,7 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
     {no:2,who:'楊境界',guest:'楊境界博士',pages:[['楊博士 ‧ 空氣取水','https://event.bymyway.com/curated/hnv-cc/']],v:[
       {id:'5247b010-60c2-4e8c-9459-173fa6b6d1b9',live:false,title:'專訪 楊境界博士',dur:'17:48',date:'2026.10.09',
        desc:'專注氫同位素與細胞能量代謝研究。與漢諾威研發團隊把石墨烯篩分技術，轉化為可量產的常溫降氘製程，並在高雄旗山建立示範基地。'}]},
-    {no:3,who:'周總',guest:'約瑟布 周總',pages:[['約瑟布 ‧ 永續綠牆','https://event.bymyway.com/curated/joseph-cloth/']],v:[
+    {no:3,who:'周睿麒',guest:'約瑟布 周睿麒',pages:[['約瑟布 ‧ 永續綠牆','https://event.bymyway.com/curated/joseph-cloth/']],v:[
       {id:'16f7315c-a855-4a03-9b61-de7fa3d4e18a',live:false,title:'專訪約瑟布發明人 周總',dur:'21:14',date:'2026.10.11',
        desc:'讓一面牆，長出一座永續的生意。從一塊會呼吸的布，到城市裡持續生長的風景。'}]},
     {no:4,who:'黃國彰',guest:'發明家 黃國彰',pages:[['發明家黃國彰專題','https://event.bymyway.com/curated/inventor/']],v:[
@@ -1043,7 +1043,11 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
     const have=new Set(eps.flatMap(e=>e.v.map(x=>x.id)));
     const fresh=(d.episodes||[]).filter(e=>e&&e.id&&e.title&&!have.has(e.id)&&/^https:\/\//.test(e.url||''))
       .sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));
-    if(!fresh.length)return;
+    // 來賓專屬網頁（2026-10-28）：API 依節目標題對到策展名冊裡已上架的個人頁，併進該集彈窗的「認識來賓」
+    const applyPages=()=>{(d.episodes||[]).forEach(e=>{if(!(e.no>0)||!e.pages||!e.pages.length)return;
+      const ep=eps.find(x=>x.no===e.no);if(!ep)return;
+      e.pages.forEach(([t,u])=>{if(/^https:\/\//.test(u)&&!ep.pages.some(p=>p[1]===u))ep.pages.push([t,u])})})};
+    if(!fresh.length){applyPages();return}
     const ver=e=>({id:e.id,url:e.url,live:e.version==='live',title:e.title,desc:e.desc||'',dur:e.dur||'',date:e.date||''});
     // 集數以 Podcast 標題「第 N 集」為準（API 給 e.no，2026-10-28）；沒給才照順序往後排
     const add=e=>{const full=e.title.replace(/^專訪/,'').replace(/-/g,' ').trim();
@@ -1056,7 +1060,7 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
       if(m)m.v.push(ver(e));else{const n=add(e);if(n)added.push(n)}
     });
     added.sort((a,b)=>a.no-b.no);
-    render();
+    applyPages();render();
     const onair=document.querySelector('.onair');
     if(onair&&added.length){
       onair.querySelectorAll('.new').forEach(n=>n.remove());
