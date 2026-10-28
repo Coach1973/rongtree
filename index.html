@@ -1045,14 +1045,17 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
       .sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));
     if(!fresh.length)return;
     const ver=e=>({id:e.id,url:e.url,live:e.version==='live',title:e.title,desc:e.desc||'',dur:e.dur||'',date:e.date||''});
+    // 集數以 Podcast 標題「第 N 集」為準（API 給 e.no，2026-10-28）；沒給才照順序往後排
     const add=e=>{const full=e.title.replace(/^專訪/,'').replace(/-/g,' ').trim();
-      const ep={no:Math.max(0,...eps.map(x=>x.no))+1,who:full.split(/\s+/).pop(),guest:full,pages:[],v:[ver(e)]};eps.push(ep);return ep;};
-    const added=fresh.filter(e=>e.version!=='live').map(add);
+      const same=e.no>0&&eps.find(x=>x.no===e.no);if(same){same.v.push(ver(e));return null}
+      const ep={no:e.no>0?e.no:Math.max(0,...eps.map(x=>x.no))+1,who:full.split(/\s+/).pop(),guest:full,pages:[],v:[ver(e)]};eps.push(ep);return ep;};
+    const added=fresh.filter(e=>e.version!=='live').map(add).filter(Boolean);
     fresh.filter(e=>e.version==='live').forEach(e=>{
       const rev=[...eps].reverse();
-      const m=rev.find(x=>x.who&&e.title.includes(x.who))||rev.find(x=>x.v.some(y=>!y.live&&share3(y.title,e.title)));
-      if(m)m.v.push(ver(e));else add(e);
+      const m=(e.no>0&&eps.find(x=>x.no===e.no))||rev.find(x=>x.who&&e.title.includes(x.who))||rev.find(x=>x.v.some(y=>!y.live&&share3(y.title,e.title)));
+      if(m)m.v.push(ver(e));else{const n=add(e);if(n)added.push(n)}
     });
+    added.sort((a,b)=>a.no-b.no);
     render();
     const onair=document.querySelector('.onair');
     if(onair&&added.length){
