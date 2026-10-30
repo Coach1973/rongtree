@@ -870,13 +870,13 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
     const btn=f.querySelector('button[type=submit]');btn.disabled=true;
     const c=f.contact.value.trim(),isMail=c.includes('@');
     // 2026-10-23 教練：選了時間就先把那一小時占成「待確認」（/api/rongtree/hold）；搶不到才請對方改選，其他狀況退回一般留資料
-    let held=false,heldLabel='';
+    let held=false,heldLabel='',heldForm='';
     if(whenText){
       try{
         const r=await fetch('/api/rongtree/hold',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
           date:wd.value,start:wt.value,name:f.who.value.trim(),org:f.org.value.trim(),contact:c,msg:f.msg.value.trim(),website:f.website.value})});
         const j=await r.json().catch(()=>({}));
-        if(r.ok&&j.ok===true&&j.held){held=true;heldLabel=j.label||whenText}
+        if(r.ok&&j.ok===true&&j.held){held=true;heldLabel=j.label||whenText;heldForm=j.form||''}
         else if(r.status===409&&j.code==='taken'){
           btn.disabled=false;
           sum.innerHTML='<strong>'+(j.error||'這個時段剛剛被預約走了')+'</strong><br>空檔清單已更新，請改選別的時間再送出。';
@@ -895,7 +895,10 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
     const pre=document.getElementById('summary');
     if(sent){
       document.getElementById('done-eyebrow').textContent=held?'已保留':'已送出';
-      document.getElementById('copied').textContent=held?`已幫你先保留 ${heldLabel}，教練確認後會盡快與你聯絡。想先聊聊，也可以直接加榮樹下官方 LINE@。`:'我們已經收到你的申請，會盡快與你聯絡。想先聊聊，也可以直接加榮樹下官方 LINE@。';
+      const cp=document.getElementById('copied');
+      cp.textContent=held?(heldForm?`已幫你先保留 ${heldLabel}。下一步請填寫來賓資料表（約 10 分鐘），主持人會先讀過你的故事；教練確認後會盡快與你聯絡。`:`已幫你先保留 ${heldLabel}，教練確認後會盡快與你聯絡。想先聊聊，也可以直接加榮樹下官方 LINE@。`):'我們已經收到你的申請，會盡快與你聯絡。想先聊聊，也可以直接加榮樹下官方 LINE@。';
+      // 2026-10-30 教練：預約完直接帶去填來賓資料表，不用等教練再轉網址
+      if(held&&heldForm){const a=document.createElement('a');a.className='go';a.href=heldForm;a.target='_blank';a.rel='noopener';a.textContent='下一步：填寫來賓資料表 →';cp.append(document.createElement('br'),a)}
       pre.textContent='';pre.hidden=true;
       if(held)document.dispatchEvent(new Event('rt-reload'));
     }else{
