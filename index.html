@@ -894,9 +894,9 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
     btn.disabled=false;
     const pre=document.getElementById('summary');
     if(sent){
-      document.getElementById('done-eyebrow').textContent=held?'已保留':'已送出';
+      document.getElementById('done-eyebrow').textContent=held?'已預約':'已送出';
       const cp=document.getElementById('copied');
-      cp.textContent=held?(heldForm?`已幫你先保留 ${heldLabel}。下一步請填寫來賓資料表（約 10 分鐘），主持人會先讀過你的故事；教練確認後會盡快與你聯絡。`:`已幫你先保留 ${heldLabel}，教練確認後會盡快與你聯絡。想先聊聊，也可以直接加榮樹下官方 LINE@。`):'我們已經收到你的申請，會盡快與你聯絡。想先聊聊，也可以直接加榮樹下官方 LINE@。';
+      cp.textContent=held?(heldForm?`已幫你預約 ${heldLabel}。下一步請填寫來賓資料表（約 10 分鐘），主持人會先讀過你的故事，現場就能直接聊到重點。`:`已幫你預約 ${heldLabel}，我們會盡快與你聯絡。想先聊聊，也可以直接加榮樹下官方 LINE@。`):'我們已經收到你的申請，會盡快與你聯絡。想先聊聊，也可以直接加榮樹下官方 LINE@。';
       // 2026-10-30 教練：預約完直接帶去填來賓資料表，不用等教練再轉網址
       if(held&&heldForm){const a=document.createElement('a');a.className='go';a.href=heldForm;a.target='_blank';a.rel='noopener';a.textContent='下一步：填寫來賓資料表 →';cp.append(document.createElement('br'),a)}
       pre.textContent='';pre.hidden=true;
