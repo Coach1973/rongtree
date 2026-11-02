@@ -368,6 +368,16 @@ legend,.lbl{font:500 20px/1.4 var(--sans);letter-spacing:.1em;color:var(--on-ink
 .slots a.go{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;border-radius:999px;background:var(--amber);color:#1a1206;font-weight:500}
 .slots a.go:hover{background:var(--amber-hi)}
 .slots a.ok{color:var(--amber-deep);font-weight:700}
+.host-zone{margin:0 0 28px;padding:18px 22px;border:1px solid var(--paper-line);border-radius:var(--r);background:var(--paper-2)}
+.host-zone button,.slots a.host-see{font:inherit;font-size:20px;min-height:48px;padding:0 22px;border-radius:999px;border:0;background:var(--ink);color:var(--on-ink);cursor:pointer;display:inline-flex;align-items:center;text-decoration:none;white-space:nowrap}
+.host-zone button:hover,.slots a.host-see:hover{background:var(--ink-3)}
+.host-zone button.ghost{background:transparent;color:var(--on-paper);border:1px solid var(--paper-line)}
+.host-zone form{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:14px}
+.host-zone input{font:inherit;font-size:20px;min-height:48px;padding:0 14px;border:1px solid var(--paper-line);border-radius:var(--r);background:#fff;color:var(--on-paper);max-width:100%}
+.host-zone .hmsg{font-size:20px;color:#a33;margin:10px 0 0}
+.host-zone .hlinks{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:12px}
+.slots .host-links{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+
 .guests{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
 .guests li{background:var(--paper-2);border-radius:var(--r);padding:22px;display:grid;grid-template-columns:72px 1fr;gap:16px;align-items:start}
 .guests .ph{width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid var(--amber-deep);background:var(--paper-line);display:grid;place-items:center;font:900 28px/1 var(--serif);color:var(--amber-deep)}
@@ -775,6 +785,22 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
         </ol>
       </div>
     </div>
+    <div class="host-zone" id="host-zone">
+      <button type="button" id="host-open">我是主持人</button>
+      <span id="host-hint"> 主持人在這裡直接看來賓填的資料，不用另外記網址</span>
+      <form id="host-form" hidden autocomplete="on">
+        <input id="host-phone" name="phone" type="tel" inputmode="numeric" placeholder="主持人手機號碼" aria-label="主持人手機號碼" autocomplete="username">
+        <input id="host-pw" name="password" type="password" placeholder="密碼" aria-label="密碼" autocomplete="current-password">
+        <button type="submit">進入主持人專區</button>
+        <button type="button" class="ghost" id="host-cancel">取消</button>
+      </form>
+      <p class="hmsg" id="host-msg" role="alert" hidden></p>
+      <div class="hlinks" id="host-panel" hidden>
+        <b>主持人專區</b>
+        <a class="host-see" id="host-all" href="#" target="_blank" rel="noopener">全部來賓卡總覽</a>
+        <button type="button" class="ghost" id="host-out">登出</button>
+      </div>
+    </div>
     <h3 class="sub-h rv">接下來的訪談</h3>
     <ul class="slots" id="prep-slots" aria-live="polite"><li><span class="who none">讀取中…</span></li></ul>
     <h3 class="sub-h rv">還有空檔的時間</h3>
@@ -920,12 +946,37 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
   const day=(d,s,e)=>{const x=new Date(d+'T00:00:00+08:00');return `${x.getMonth()+1}/${x.getDate()}（${'日一二三四五六'[x.getDay()]}）<small>${s}${e?'–'+e:''}</small>`;};
   open.addEventListener('click',e=>{const a=e.target.closest('a.book');if(!a)return;e.preventDefault();
     document.dispatchEvent(new CustomEvent('rt-pick',{detail:{d:a.dataset.d,a:a.dataset.a}}))});
+  /* 主持人專區（2026-11-02 教練）：手機＋密碼登入後，每場已交資料旁直接出現「看來賓填的資料」 */
+  let host=null;
+  const $=id=>document.getElementById(id);
+  const tokOf=u=>(u.form||'').split('/').pop();
+  const hostLinks=u=>{
+    if(!host)return '<a class="host-see" href="#host-zone" data-host-login="1">主持人看資料</a>';
+    const l=(host.by_slot||{})[tokOf(u)]||[];
+    return l.length?l.map(c=>`<a class="host-see" href="${esc(c.url)}" target="_blank" rel="noopener">看 ${esc(c.guest||'來賓')} 填的資料</a>`).join(''):'';
+  };
+  const showHost=()=>{$('host-open').hidden=!!host;$('host-hint').hidden=!!host;$('host-panel').hidden=!host;
+    if(host)$('host-all').href=host.list_url;if(host)$('host-form').hidden=true;};
+  const loadHost=()=>fetch('/api/rongtree/host/cards',{cache:'no-store',credentials:'same-origin'}).then(r=>r.ok?r.json():null)
+    .then(d=>{host=d&&d.ok?d:null;showHost();});
+  const msg=t=>{$('host-msg').textContent=t||'';$('host-msg').hidden=!t;};
+  $('host-open').addEventListener('click',()=>{$('host-form').hidden=false;msg('');$('host-phone').focus();});
+  $('host-cancel').addEventListener('click',()=>{$('host-form').hidden=true;msg('');});
+  $('host-form').addEventListener('submit',e=>{e.preventDefault();msg('');
+    fetch('/api/rongtree/host/login',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({phone:$('host-phone').value,password:$('host-pw').value})}).then(r=>r.json()).then(j=>{
+      if(!j.ok){msg(j.error||'登入失敗');return;}
+      $('host-pw').value='';loadHost().then(()=>document.dispatchEvent(new Event('rt-reload')));
+    }).catch(()=>msg('連不上，請稍後再試'));});
+  $('host-out').addEventListener('click',()=>fetch('/api/rongtree/host/logout',{method:'POST',credentials:'same-origin'}).then(()=>{host=null;showHost();document.dispatchEvent(new Event('rt-reload'));}));
+  slots.addEventListener('click',e=>{const a=e.target.closest('a[data-host-login]');if(!a)return;e.preventDefault();
+    $('host-form').hidden=false;$('host-zone').scrollIntoView({behavior:'smooth',block:'center'});$('host-phone').focus();});
   const load=()=>fetch('/api/rongtree/prep',{cache:'no-store'}).then(r=>r.json()).then(d=>{
     const up=d.upcoming||[];
     slots.innerHTML=up.length?up.map(u=>`<li><span class="when">${day(u.date,u.start,u.end)}</span>`+
       `<span class="who"><span class="fld">嘉賓：${u.guest?esc(u.guest):'待確認'}${u.tentative?'（時間待確認）':''}</span>`+
       `${u.booked_by?`<span class="fld inv">邀請人：${esc(u.booked_by)}</span>`:''}</span>`+
-      (u.form?(u.submitted?`<a class="ok" href="${esc(u.form)}" target="_blank" rel="noopener">✓ 已交資料${u.count>1?`（${u.count} 位）`:''}　修改或新增</a>`
+      (u.form?(u.submitted?`<span class="host-links">${hostLinks(u)}<a class="ok" href="${esc(u.form)}" target="_blank" rel="noopener">✓ 已交資料${u.count>1?`（${u.count} 位）`:''}　修改或新增</a></span>`
                          :`<a class="go" href="${esc(u.form)}" target="_blank" rel="noopener">填寫來賓資料表 →</a>`):'<span></span>')+`</li>`).join('')
       :'<li><span class="who none">接下來兩個月還沒有排定的訪談。</span></li>';
     const op=d.open||[];
@@ -939,7 +990,7 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
       (x.date?`<span class="d">訪談 ${day(x.date,x.start,'').replace(/<\/?small>/g,' ')}</span>`:'')+`</div></li>`).join('');
     empty.hidden=g.length>0;
   }).catch(()=>{slots.innerHTML='<li><span class="who none">暫時讀不到訪談清單，請稍後再試。</span></li>';open.innerHTML='';document.dispatchEvent(new CustomEvent('rt-open',{detail:null}))});
-  document.addEventListener('rt-reload',load);load();
+  document.addEventListener('rt-reload',load);loadHost().then(load);
 })();
 </script>
 <script>
