@@ -196,6 +196,14 @@ section{position:relative}
 .legend i{display:inline-block;width:20px;height:20px;border-radius:8px 0 8px 0;margin-right:8px;vertical-align:-2px;border:1px solid rgba(239,230,210,.35)}
 .legend i.on{background:var(--amber);border-color:var(--amber)}
 .legend b{color:var(--amber-hi);font-weight:700}
+/* 百集格子：滑鼠移到已播出的集數，浮出說明（不用點開才看得到內容） */
+.ep-tip{position:fixed;z-index:80;width:min(380px,calc(100vw - 24px));padding:16px 20px 18px;background:var(--paper);color:var(--ink);border:1px solid var(--amber-deep);border-radius:10px;box-shadow:0 18px 40px -12px rgba(0,0,0,.6);font:400 20px/1.6 var(--sans);letter-spacing:.02em;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s}
+.ep-tip.show{opacity:1;transform:none}
+.ep-tip .t-no{margin:0;font:600 20px/1.4 var(--sans);letter-spacing:.12em;color:var(--amber-deep)}
+.ep-tip .t-guest{margin:2px 0 0;font:700 20px/1.4 var(--serif)}
+.ep-tip .t-meta{margin:2px 0 0;font:400 20px/1.5 var(--sans);color:#5b4a2a}
+.ep-tip .t-desc{margin:8px 0 0}
+.ep-tip .t-hint{margin:10px 0 0;font:600 20px/1.4 var(--sans);color:var(--amber-deep)}
 .grid100{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:8px}
 .grid100 li{display:flex;min-width:0}
 .cell{flex:1;min-width:0;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:8px 4px;margin:0;border:1px solid var(--line-ink);border-radius:22px 0 22px 0;background:rgba(239,230,210,.025);color:rgba(239,230,210,.5);font:500 20px/1.15 var(--sans);letter-spacing:0;font-variant-numeric:tabular-nums;text-decoration:none;cursor:pointer;transition:border-color .2s,background .2s,color .2s}
@@ -1087,6 +1095,28 @@ footer .base a{text-decoration:none;white-space:nowrap}footer .base a:hover{colo
     dlg.showModal();dlg.scrollTop=0;
   }
   grid.addEventListener('click',ev=>{const b=ev.target.closest('button.cell');if(b)open(+b.dataset.no)});
+  // 滑鼠移到（或鍵盤聚焦到）已播出的集數 → 浮出來賓、標題、日期長度、節目說明；點一下仍開完整彈窗
+  const tip=document.createElement('div');tip.className='ep-tip';tip.setAttribute('role','tooltip');document.body.appendChild(tip);
+  const canHover=window.matchMedia&&matchMedia('(hover:hover)').matches;
+  function showTip(b){
+    const e=eps.find(x=>x.no===+b.dataset.no);if(!e)return;
+    const v=[...e.v].sort((a,c)=>a.live-c.live),m=v.find(x=>x.desc)||v[0];if(!m)return;
+    tip.innerHTML=`<p class="t-no">第 ${pad(e.no)} 集</p><p class="t-guest">${esc(e.guest)}</p>`+
+      `<p class="t-meta">${esc(m.title)}${m.date?'　‧　'+esc(m.date):''}${m.dur?'　‧　'+esc(m.dur):''}</p>`+
+      (m.desc?`<p class="t-desc">${esc(m.desc)}</p>`:'')+`<p class="t-hint">點一下看全部、收聽 ↗</p>`;
+    const r=b.getBoundingClientRect(),w=tip.offsetWidth,h=tip.offsetHeight,vw=document.documentElement.clientWidth;
+    let x=Math.min(Math.max(12,r.left+r.width/2-w/2),vw-w-12);
+    let y=r.top-h-10;if(y<8)y=r.bottom+10;y=Math.max(8,Math.min(y,innerHeight-h-8));
+    tip.style.left=x+'px';tip.style.top=y+'px';tip.classList.add('show');
+  }
+  const hideTip=()=>tip.classList.remove('show');
+  if(canHover){
+    grid.addEventListener('mouseover',ev=>{const b=ev.target.closest('button.cell');if(b)showTip(b)});
+    grid.addEventListener('mouseout',ev=>{if(ev.target.closest('button.cell'))hideTip()});
+  }
+  grid.addEventListener('focusin',ev=>{const b=ev.target.closest('button.cell');if(b)showTip(b)});
+  grid.addEventListener('focusout',hideTip);
+  addEventListener('scroll',hideTip,{passive:true});
   dlg.querySelector('.dlg-x').addEventListener('click',()=>dlg.close());
   dlg.addEventListener('click',ev=>{if(ev.target===dlg)dlg.close()});
   render();
